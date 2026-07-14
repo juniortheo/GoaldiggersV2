@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Goal Diggers Book Club — Kigali, Rwanda</title>
+  <meta name="description" content="Goal Diggers Book Club — Read. Reflect. Act. A literary community in Kigali, Rwanda." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="grainient.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR — same on every page. If you edit a link here,
+     make the same edit on the other pages too.
+     ============================================================ -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar__logo">
+    <img src="logo.jpeg" alt="Goal Diggers Book Club Logo" class="navbar__logo-img" onerror="this.style.display='none'" />
+    <span class="navbar__logo-text">
+      Goal Diggers
+      <span>Read · Reflect · Act</span>
+    </span>
+  </a>
+  <ul class="navbar__links">
+    <li><a href="index.html"class="active">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="book.html" >Book of the Month</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="login.html">Members</a></li>
+    <li><a href="donate.html" class="navbar__cta">Donate</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- Mobile dropdown menu (shown when the hamburger is tapped) -->
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html" onclick="closeMenu()">Home</a>
+  <a href="about.html" onclick="closeMenu()">About</a>
+  <a href="book.html" onclick="closeMenu()">Book of the Month</a>
+  <a href="events.html" onclick="closeMenu()">Events</a>
+  <a href="blog.html" onclick="closeMenu()">Blog</a>
+  <a href="gallery.html" onclick="closeMenu()">Gallery</a>
+  <a href="shop.html" onclick="closeMenu()">Shop</a>
+  <a href="contact.html" onclick="closeMenu()">Contact</a>
+  <a href="login.html" onclick="closeMenu()">Members</a>
+  <a href="donate.html" onclick="closeMenu()">Donate</a>
+</div>
+
+<!-- Navbar behavior: hamburger toggle + shrink on scroll (self-contained) -->
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  if (hamburger) hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open'); 
+    mobileNav.classList.toggle('open');
+  });
+  function closeMenu() { 
+    if (hamburger) { 
+      hamburger.classList.remove('open'); 
+      mobileNav.classList.remove('open'); 
+    } 
+  }
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (nav) nav.style.height = window.scrollY > 60 ? '56px' : '68px';
+  });
+</script>
+
+
+<!-- ============================================================
+     HERO — full-screen photo + green overlay + floating logo.
+     • Background photo: edit in styles.css → search "EDIT HERE — HOME BACKGROUND PHOTO"
+     • Logo: save logo.png in the folder; it floats automatically.
+     ============================================================ -->
+<header class="hero">
+  <div id="grainient-hero" class="grainient-container" aria-hidden="true"></div>
+
+  <!-- Glowing gold lines that expand and fade -->
+  <span class="glow-line" style="top:22%;left:0;width:38%;animation-delay:0s" aria-hidden="true"></span>
+  <span class="glow-line" style="top:72%;right:0;left:auto;width:30%;transform-origin:right center;animation-delay:1.8s" aria-hidden="true"></span>
+  <span class="glow-line vertical" style="top:10%;left:58%;height:34%;animation-delay:3.2s" aria-hidden="true"></span>
+  <span class="glow-line" style="top:48%;left:6%;width:22%;animation-delay:4.4s" aria-hidden="true"></span>
+
+  <!-- Birds — they glide forward as the visitor scrolls -->
+  <div class="bird" style="top:16%;left:4%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div>
+  <div class="bird small" style="top:11%;left:12%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div>
+  <div class="bird small" style="top:24%;left:8%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div>
+  <div class="bird" style="top:64%;left:2%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div>
+  <div class="bird small" style="top:70%;left:9%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div>
+
+  <div class="hero-text">
+    <p class="hero-kicker reveal visible">Kigali, Rwanda · Est. 2024</p>
+
+    <!-- EDIT HERE — main headline -->
+    <div class="hero-heading reveal visible">
+      <img src="logo.png" alt="Goal Diggers logo" class="hero-heading-logo" onerror="this.style.display='none'" />
+      <h1 class="hero-title">
+        Read boldly.<br>
+        <em>Grow together.</em><br>
+        Give generously.
+      </h1>
+    </div>
+
+    <p class="hero-tagline reveal visible">Read · Reflect · Act.</p>
+
+    <!-- EDIT HERE — one short sentence only (the details live on the other pages) -->
+    <p class="hero-sub reveal visible">
+      A literary community in Kigali — one book, one child, one conversation at a time.
+    </p>
+
+    <div class="hero-buttons reveal visible">
+      <a href="donate.html" class="btn btn-gold">Support a Child</a>
+      <a href="about.html"  class="btn btn-outline-cream">Discover Our Story</a>
+    </div>
+  </div>
+
+  <!-- Floating logo (right side) -->
+  <div class="hero-logo-panel">
+    <!-- EDIT HERE — save your logo as "logo.png" in this folder -->
+    <img src="logo gold.png" alt="Goal Diggers Book Club — Read. Reflect. Act." class="hero-logo-img"
+         onerror="this.style.display='none'" />
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <svg width="16" height="24" viewBox="0 0 16 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="1" y="1" width="14" height="22" rx="7"/>
+      <circle cx="8" cy="7" r="2" fill="currentColor" stroke="none">
+        <animateMotion dur="1.8s" repeatCount="indefinite" path="M 0 0 L 0 10"/>
+      </circle>
+    </svg>
+  </div>
+</header>
+<section>
+  <div class="container grid-2">
+    <div>
+      <p class="section-label reveal">Our story</p>
+      <h2 class="section-title reveal reveal-delay-1">How it <em>began</em></h2>
+      <div class="divider reveal reveal-delay-1"></div>
+      <!-- EDIT HERE — replace with the club's real founding story -->
+      <p class="section-body reveal reveal-delay-2">Write the club's origin story here — who started it, the first book you read together, and the moment the group decided to start paying school fees for children in the community.</p>
+      <p class="section-body reveal reveal-delay-2 mt-16">Today we read one book every month and sponsor five remarkable children through school, funded by members and monthly donors.</p>
+    </div>
+    <div class="photo-frame reveal reveal-delay-2">
+      <!-- EDIT HERE —bout-photo save a club photo as "about-photo.jpg" in the folder and change the src below -->
+      <a href="about.html" aria-label="Learn more about Goal Diggers"><img src="home img 1.jpg" alt="Goal Diggers Book Club members" /></a>
+    </div>
+  </div>
+</section>
+<section id="blog">
+  <div class="container">
+    <div class="text-center">
+      <p class="section-label reveal">The Reading Room</p>
+      <h2 class="section-title reveal reveal-delay-1">From our <em>writers</em></h2>
+      <div class="divider reveal reveal-delay-1"></div>
+      <p class="section-body reveal reveal-delay-2">Explore the latest essays, book reactions, and stories from the Goal Diggers community.</p>
+    </div>
+    <div id="home-blog-posts" class="grid-3 mt-24">Loading…</div>
+    <div class="text-center mt-16">
+      <a href="blog.html" class="btn btn-outline-cream">Read the full blog</a>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:30px">
+  <div class="container">
+    <div id="home-highlights" class="grid-3 mt-24">Loading…</div>
+    <div class="text-center mt-16">
+      <a href="gallery.html" class="btn btn-outline-cream">View full gallery</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mg-section{ position:relative; overflow:hidden; background:var(--color-warm-white); padding:clamp(36px,5vw,72px) 0; }
+  .mg-head{ position:relative; z-index:2; }
+  .mg-title{ font-family:var(--font-serif); font-weight:600; letter-spacing:.04em;
+    font-size:clamp(2rem,4.5vw,3.3rem); color:var(--color-black); text-transform:uppercase;
+    line-height:1.05; margin-top:6px;
+  }
+  .mg-filters{ display:flex; flex-wrap:wrap; justify-content:center; gap:12px;
+    margin:24px 0 40px; position:relative; z-index:2;
+  }
+  .mg-filter{ font-family:var(--font-sans); font-size:.74rem; font-weight:500;
+    letter-spacing:.14em; text-transform:uppercase; cursor:pointer;
+    padding:11px 22px; border-radius:30px; background:var(--color-warm-white);
+    color:var(--color-charcoal); border:1.5px solid rgba(138,117,48,.3);
+    transition:all .3s ease;
+  }
+  .mg-filter:hover{ border-color:var(--color-gold); color:var(--color-deep-green); transform:translateY(-2px); }
+  .mg-filter.active{ background:var(--color-deep-green); color:var(--color-cream);
+    border-color:var(--color-deep-green); box-shadow:0 10px 24px -10px rgba(85,107,47,.6);
+  }
+  .mg-wall{ position:relative; z-index:2; display:flex; flex-wrap:wrap;
+    justify-content:center; align-items:flex-start; gap:16px;
+  }
+  .mg-item{ position:relative; border-radius:var(--radius); overflow:hidden;
+    box-shadow:0 12px 30px -14px rgba(20,20,20,.4);
+    transition:transform .5s cubic-bezier(.34,1.3,.5,1), opacity .5s ease, box-shadow .4s, filter .4s;
+    cursor:pointer; background:var(--color-cream);
+    flex:0 0 auto;
+  }
+  .mg-item:nth-child(odd){ transform:translateY(18px); }
+  .mg-item:nth-child(3n){ transform:translateY(-14px); }
+  .mg-item:nth-child(4n){ transform:translateY(30px); }
+  .mg-item.w-s{ width:clamp(120px,15vw,170px); }
+  .mg-item.w-m{ width:clamp(170px,22vw,240px); }
+  .mg-item.w-l{ width:clamp(210px,26vw,300px); }
+  .mg-item .mg-ph{ width:100%; aspect-ratio:var(--ar,3/4);
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,var(--color-soft-green),var(--color-deep-green));
+    color:var(--color-cream); font-family:var(--font-serif); font-style:italic;
+    text-align:center; padding:16px; font-size:1rem;
+  }
+  .mg-item:hover{ transform:translateY(-6px) scale(1.03);
+    box-shadow:0 22px 44px -16px rgba(20,20,20,.5); z-index:3;
+  }
+  .mg-cap{ position:absolute; inset:auto 0 0 0; padding:26px 14px 12px;
+    background:linear-gradient(transparent,rgba(20,20,20,.78)); color:#fff;
+    font-family:var(--font-sans); font-size:.82rem; opacity:0;
+    transform:translateY(8px); transition:opacity .35s, transform .35s;
+  }
+  .mg-item:hover .mg-cap{ opacity:1; transform:translateY(0); }
+  .mg-dot{ position:absolute; border-radius:50%; z-index:1; background:var(--color-gold);
+    animation:mg-float 7s ease-in-out infinite;
+  }
+  .mg-dot.d1{ width:34px; height:34px; top:30%; left:6%; animation-delay:0s; }
+  .mg-dot.d2{ width:20px; height:20px; top:62%; left:48%; background:var(--color-deep-green); animation-delay:1.6s; }
+  .mg-dot.d3{ width:14px; height:14px; top:74%; left:53%; background:var(--color-cream); animation-delay:3s; }
+  .mg-dot.d4{ width:26px; height:26px; top:18%; right:8%; left:auto; background:var(--color-gold); animation-delay:2.2s; }
+  @keyframes mg-float{ 0%,100%{ transform:translateY(0) translateX(0); } 50%{ transform:translateY(-22px) translateX(8px); } }
+  @media (max-width:600px){ .mg-item.w-l{ width:46vw; } .mg-item.w-m{ width:42vw; } .mg-item.w-s{ width:34vw; } .mg-wall{ gap:10px; } }
+</style>
+
+<section class="donate-section">
+  <div class="donate-form-wrap reveal">
+
+    <div class="donate-form-header">
+      <h3>Make your contribution</h3>
+      <p>Choose an amount in RWF, enter your phone number, and tap Pay — your MTN MoMo dialer opens instantly.</p>
+    </div>
+
+    <div class="donate-form-body">
+
+      <!-- Frequency toggle -->
+      <div class="freq-toggle">
+        <button class="freq-btn active" id="freq-monthly" onclick="setFreq('monthly')">Monthly</button>
+        <button class="freq-btn"        id="freq-once"    onclick="setFreq('once')">One-time</button>
+      </div>
+
+      <!-- Quick amount pills (RWF) — EDIT the numbers to suit your donors -->
+      <div class="quick-amounts" id="quick-amounts">
+        <button class="quick-pill" data-amount="2000"  onclick="selectPill(this)">2,000</button>
+        <button class="quick-pill" data-amount="5000"  onclick="selectPill(this)">5,000</button>
+        <button class="quick-pill" data-amount="10000" onclick="selectPill(this)">10,000</button>
+        <button class="quick-pill" data-amount="25000" onclick="selectPill(this)">25,000</button>
+        <button class="quick-pill" data-amount="50000" onclick="selectPill(this)">50,000</button>
+      </div>
+
+      <!-- Custom amount -->
+      <div class="amount-row">
+        <span class="currency-label">RWF</span>
+        <input type="number" class="amount-input" id="amount-input"
+               placeholder="Enter amount" min="500"
+               oninput="clearPillSelection(); updateImpact()" />
+      </div>
+
+      <!-- Impact counter — updates live as they type -->
+      <div class="impact-counter" id="impact-counter" style="display:none">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span id="impact-text"></span>
+      </div>
+
+      <!-- Phone number input -->
+      <div class="form-field" style="margin-top:18px">
+        <label for="donor-phone" style="font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-deep-green);display:block;margin-bottom:8px">Your MTN MoMo number</label>
+        <div style="display:flex;align-items:center;gap:0">
+          <span style="background:var(--color-cream);border:1px solid rgba(43,82,25,.22);border-right:none;border-radius:var(--radius) 0 0 var(--radius);padding:13px 14px;font-size:.9rem;color:var(--color-charcoal);white-space:nowrap">+250</span>
+          <input type="tel" id="donor-phone" class="amount-input"
+                 style="border-radius:0 var(--radius) var(--radius) 0;border-left:none"
+                 placeholder="78 000 0000" maxlength="9"
+                 oninput="this.value=this.value.replace(/\D/g,'')" />
+        </div>
+      </div>
+
+      <p class="donate-note" id="donate-note">
+        You're setting up a <strong>monthly</strong> gift. Dial the same code each month — we'll remind you.
+      </p>
+
+      <!-- PAY BUTTON -->
+      <button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span id="checkout-label">Pay with MTN MoMo</span>
+      </button>
+
+      <!-- Shows the USSD code after tap (useful on desktop where dialer can't open) -->
+      <div class="ussd-box" id="ussd-box" style="display:none;margin-top:18px;padding:16px;background:var(--color-cream);border:1px dashed var(--color-gold);border-radius:var(--radius);text-align:center">
+        <span style="font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--color-gold)">Your MoMo code</span>
+        <code id="ussd-code" style="display:block;font-size:1.05rem;font-weight:600;color:var(--color-deep-green);letter-spacing:.04em;margin:8px 0 12px;word-break:break-all"></code>
+        <button onclick="copyUssd()" style="background:none;border:1px solid var(--color-deep-green);border-radius:var(--radius);padding:8px 20px;cursor:pointer;font-family:var(--font-sans);font-size:.85rem;color:var(--color-deep-green)">Copy Code</button>
+      </div>
+
+      <div class="secure-note">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+        Payments go directly to the club's MTN Mobile Money — no middleman.
+      </div>
+
+    </div>
+  </div><!-- /donate-form-wrap -->
+</section>
+
+<!-- ============================================================
+     IMPACT STRIP — three quick numbers (EDIT HERE to update)
+     ============================================================ -->
+<section style="padding-top:0">
+  <div class="container">
+    <div class="impact-strip reveal">
+      <span class="glow-line" style="top:30%;left:0;width:46%;animation-delay:.8s" aria-hidden="true"></span>
+      <span class="glow-line" style="top:78%;right:0;left:auto;width:36%;transform-origin:right center;animation-delay:2.6s" aria-hidden="true"></span>
+      <div><div class="impact-number">12+</div><div class="impact-label">Books read together</div></div>
+      <div><div class="impact-number">5</div><div class="impact-label">Children in school</div></div>
+      <div><div class="impact-number">1</div><div class="impact-label">Community, growing</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER — same on every page
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h3>Goal Diggers Book Club</h3>
+        <p style="font-size:.94rem;max-width:380px;opacity:.9">A literary community in Kigali, Rwanda. We read one book a month and pay school fees for five sponsored children. Read · Reflect · Act.</p>
+        <div class="social-row">
+          <a href="https://www.youtube.com/@Goaldiggersbookclubrw" aria-label="YouTube" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.5 15.6V8.4L15.8 12z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/goaldiggersrw/" aria-label="Instagram" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.2-.4-.4-1.1-.4-2.3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zM12 0C8.7 0 8.3 0 7.1.1 5.8.1 4.9.3 4.1.6c-.8.3-1.5.8-2.2 1.4C1.3 2.7.9 3.4.6 4.2c-.3.8-.5 1.7-.5 3C0 8.3 0 8.7 0 12s0 3.7.1 4.9c0 1.2.2 2.1.5 2.9.3.8.8 1.5 1.4 2.2.6.6 1.3 1.1 2.2 1.4.8.3 1.7.5 2.9.5 1.3.1 1.7.1 4.9.1s3.7 0 4.9-.1c1.2 0 2.1-.2 2.9-.5.8-.3 1.5-.8 2.2-1.4.6-.6 1.1-1.3 1.4-2.2.3-.8.5-1.7.5-2.9.1-1.3.1-1.7.1-4.9s0-3.7-.1-4.9c0-1.2-.2-2.1-.5-2.9a6 6 0 0 0-1.4-2.2A6 6 0 0 0 19.8.6c-.8-.3-1.7-.5-2.9-.5C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm7.8-10.4a1.4 1.4 0 1 1-2.9 0 1.4 1.4 0 0 1 2.9 0z"/></svg>
+          </a>
+          <a href="https://substack.com/@thegoaldiggersbookclub" aria-label="Substack" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M22.5 3.2H1.5v2.6h21zm0 5H1.5v2.6h21zM1.5 13.2V24l10.5-5.9L22.5 24V13.2z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h3>Explore</h3>
+        <ul class="footer-links">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="book.html">Book of the Month</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="shop.html">Shop</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Support</h3>
+        <ul class="footer-links">
+          <li><a href="donate.html">Donate</a></li>
+          <li><a href="contact.html">Contact / Volunteer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Goal Diggers Book Club · Kigali, Rwanda</span>
+      <span>Read · Reflect · Act.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- GSAP — powers the scroll-flying birds and photo parallax -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="script.js"></script>
+<!-- Grainient (local ogl shim + local initializer) -->
+<script src="ogl.local.js"></script>
+<script src="grainient.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    if(window.initGrainient){
+      window._grain = window.initGrainient('#grainient-hero', {
+        color1: '#6b7e2d', /* mid green */
+        color2: '#556b2f', /* deep green */
+        color3: '#2c3b1a', /* darker green */
+        timeSpeed: 0.35,
+        warpStrength: 0.9,
+        warpFrequency: 3.0,
+        warpSpeed: 1.2,
+        warpAmplitude: 36,
+        grainAmount: 0.03,
+        grainAnimated: false,
+        contrast: 1.08,
+        gamma: 1.0,
+        saturation: 1.02,
+        zoom: 1.0
+      });
+      console.log('Grainient started:', !!window._grain);
+    }
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script src="public-content.js"></script>
+<script>
+  loadBlogPosts('home-blog-posts');
+  loadGalleryGrid('home-highlights', { featuredOnly: true, limit: 6 });
+</script>
+</body>
+</html>

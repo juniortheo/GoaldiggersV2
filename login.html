@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member Login — Goal Diggers Book Club</title>
+  <meta name="description" content="Sign in to the Goal Diggers members area." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ============================================================
+       LOGIN PAGE — self-contained styles
+       Inspired by the Belissa reference: organic curved card
+       sitting on a botanical green background.
+       ============================================================ */
+    .login-stage {
+      min-height: calc(100vh - 68px);
+      padding: 60px 24px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--color-hero-cream) 0%, rgba(240,236,224,0.9) 60%, var(--color-warm-white) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .login-stage::before,
+    .login-stage::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(240,236,224,0.3);
+      filter: blur(40px);
+      pointer-events: none;
+    }
+    .login-stage::before { width: 380px; height: 380px; top: -80px; right: -80px; }
+    .login-stage::after  { width: 260px; height: 260px; bottom: -60px; left: 10%; }
+
+    .login-card {
+      position: relative;
+      width: 100%;
+      max-width: 1080px;
+      min-height: 620px;
+      background: #ffffff;
+      border-radius: 22px;
+      box-shadow: 0 40px 80px -20px rgba(30,60,30,0.35),
+                  0 12px 24px -8px rgba(30,60,30,0.15);
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      overflow: hidden;
+    }
+
+    /* ---------- LEFT: form side ---------- */
+    .login-form-side {
+      padding: 56px 64px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+    .login-brand {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--color-deep-green, #234a2b);
+    }
+    .login-brand-mark {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 14px -4px rgba(138,117,48,0.5);
+    }
+    .login-brand-mark svg { width: 22px; height: 22px; color: var(--color-cream); }
+    .login-brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; letter-spacing: 0.02em; font-weight: 500;
+    }
+
+    .login-headline { margin-top: 8px; }
+    .login-headline .eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--color-gold);
+      margin-bottom: 14px;
+    }
+    .login-headline h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.4vw, 2.9rem);
+      font-weight: 400;
+      line-height: 1.1;
+      color: #1e3a24;
+      margin: 0;
+    }
+    .login-headline h1 em {
+      font-style: italic;
+      font-weight: 600;
+      display: block;
+    }
+    .login-headline .sub {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.95rem;
+      color: #6a7267;
+      margin-top: 14px;
+      max-width: 340px;
+      line-height: 1.55;
+    }
+
+    .login-form { display: flex; flex-direction: column; gap: 22px; max-width: 380px; }
+    .login-field label {
+      display: block;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--color-mid-green);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .login-field input {
+      width: 100%;
+      border: none;
+      border-bottom: 1.5px solid rgba(109,126,95,0.35);
+      padding: 10px 0 12px;
+      font-family: 'Jost', sans-serif;
+      font-size: 1rem;
+      background: transparent;
+      color: var(--color-deep-green);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .login-field input::placeholder { color: rgba(109,126,95,0.75); }
+    .login-field input:focus { border-bottom-color: var(--color-gold); }
+
+    .login-actions-row {
+      display: flex; justify-content: flex-end; margin-top: -8px;
+    }
+    .login-forgot {
+      font-family: 'Jost', sans-serif; font-size: 0.85rem;
+      color: #7a8478; text-decoration: none;
+      transition: color 0.2s;
+    }
+    .login-forgot:hover { color: var(--color-gold, #b8894a); }
+
+    .login-submit {
+      margin-top: 14px;
+      border: none;
+      padding: 16px 40px;
+      background: linear-gradient(135deg, var(--color-gold-light) 0%, var(--color-gold) 100%);
+      color: var(--color-cream);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase;
+      font-weight: 500;
+      border-radius: 999px;
+      cursor: pointer;
+      align-self: flex-start;
+      box-shadow: 0 10px 24px -8px rgba(138,117,48,0.55);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .login-submit:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -8px rgba(138,117,48,0.65);
+    }
+    .login-submit:disabled { opacity: 0.6; cursor: wait; }
+
+    .login-footnote {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.82rem;
+      color: #6a7267;
+      margin-top: 32px;
+    }
+    .login-footnote a { color: var(--color-gold, #b8894a); text-decoration: none; }
+    .login-footnote a:hover { text-decoration: underline; }
+
+    /* ---------- RIGHT: botanical illustration side ---------- */
+    .login-illustration {
+      position: relative;
+      background: linear-gradient(160deg, #2d5535 0%, #1e3a24 100%);
+      overflow: hidden;
+    }
+    .login-illustration svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .curve-mask {
+      position: absolute;
+      left: -1px; top: 0; bottom: 0;
+      width: 60%;
+      background: #ffffff;
+      clip-path: ellipse(90% 75% at 0% 50%);
+      z-index: 1;
+    }
+
+    /* ---------- MOBILE ---------- */
+    @media (max-width: 860px) {
+      .login-stage { padding: 30px 16px 60px; }
+      .login-card {
+        grid-template-columns: 1fr;
+        min-height: 0;
+        max-width: 480px;
+      }
+      .login-form-side { padding: 40px 32px 36px; order: 2; }
+      .login-illustration {
+        order: 1;
+        height: 180px;
+      }
+      .curve-mask {
+        left: 0; right: 0; top: auto; bottom: -1px;
+        width: 100%; height: 60%;
+        clip-path: ellipse(75% 90% at 50% 100%);
+      }
+      .login-brand { justify-content: center; margin-bottom: 8px; }
+      .login-headline { text-align: center; }
+      .login-headline .sub { margin-left: auto; margin-right: auto; }
+      .login-form { max-width: none; }
+      .login-submit { align-self: center; }
+      .login-footnote { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR — same as every other page
+     ============================================================ -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar__logo">
+    <img src="logo.jpeg" alt="Goal Diggers Book Club Logo" class="navbar__logo-img" />
+    <span class="navbar__logo-text">
+      Goal Diggers
+      <span>Read · Reflect · Act</span>
+    </span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  <div class="navbar__links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="book.html">Book of the Month</a>
+    <a href="events.html">Events</a>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="shop.html">Shop</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html" class="active">Members</a>
+    <a href="donate.html" class="navbar__cta">Donate</a>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html" onclick="closeMenu()">Home</a>
+  <a href="about.html" onclick="closeMenu()">About</a>
+  <a href="book.html" onclick="closeMenu()">Book of the Month</a>
+  <a href="events.html" onclick="closeMenu()">Events</a>
+  <a href="blog.html" onclick="closeMenu()">Blog</a>
+  <a href="gallery.html" onclick="closeMenu()">Gallery</a>
+  <a href="shop.html" onclick="closeMenu()">Shop</a>
+  <a href="contact.html" onclick="closeMenu()">Contact</a>
+  <a href="login.html" onclick="closeMenu()">Members</a>
+  <a href="donate.html" onclick="closeMenu()">Donate</a>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  if (hamburger) hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open'); mobileNav.classList.toggle('open');
+  });
+  function closeMenu(){ if(hamburger){ hamburger.classList.remove('open'); mobileNav.classList.remove('open'); } }
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (nav) nav.style.height = window.scrollY > 60 ? '56px' : '68px';
+  });
+</script>
+
+<!-- ============================================================
+     LOGIN CARD
+     ============================================================ -->
+<section class="login-stage">
+  <div class="login-card">
+
+    <!-- LEFT: sign-in form -->
+    <div class="login-form-side">
+      <div class="login-brand">
+        <span class="login-brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H4z"/>
+            <path d="M20 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/>
+          </svg>
+        </span>
+        <span class="login-brand-name">Goal Diggers</span>
+      </div>
+
+      <div class="login-headline">
+        <p class="eyebrow">Members Area</p>
+        <h1>Hello there, <em>welcome back</em></h1>
+        <p class="sub">Sign in with the email and password the club gave you. Membership is by invitation only — reach out if you'd like to join.</p>
+      </div>
+
+      <form class="login-form" onsubmit="handleLogin(event)">
+        <div class="login-field">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="Enter your email address" autocomplete="email" required />
+        </div>
+        <div class="login-field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" required />
+        </div>
+        <div class="login-actions-row">
+          <a href="contact.html" class="login-forgot">Forgot password?</a>
+        </div>
+        <button type="submit" class="login-submit" id="login-btn">Sign In</button>
+      </form>
+
+      <p class="login-footnote">
+        Not a member yet? <a href="contact.html">Get in touch</a> and we'll introduce you to the club.
+      </p>
+    </div>
+
+    <!-- RIGHT: botanical illustration -->
+    <div class="login-illustration" aria-hidden="true">
+      <div class="curve-mask"></div>
+      <svg viewBox="0 0 500 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="leafA" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7ea883"/>
+            <stop offset="100%" stop-color="#3d6b47"/>
+          </linearGradient>
+          <linearGradient id="leafB" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#a8c98f"/>
+            <stop offset="100%" stop-color="#4a7a54"/>
+          </linearGradient>
+          <linearGradient id="leafC" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c8d99e"/>
+            <stop offset="100%" stop-color="#6b8f5c"/>
+          </linearGradient>
+          <linearGradient id="leafDark" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#2d5535"/>
+            <stop offset="100%" stop-color="#183020"/>
+          </linearGradient>
+          <radialGradient id="berry" cx="0.35" cy="0.3">
+            <stop offset="0%" stop-color="#f5c976"/>
+            <stop offset="100%" stop-color="#d68a3c"/>
+          </radialGradient>
+        </defs>
+
+        <path d="M 500 700 Q 380 620 360 500 Q 340 380 400 280 Q 460 180 500 200 Z" fill="url(#leafDark)"/>
+        <path d="M 0 700 Q 40 640 20 540 Q 0 440 60 380 Q 120 320 100 240 Q 80 160 0 180 Z" fill="url(#leafDark)" opacity="0.7"/>
+
+        <g transform="translate(340, 180) rotate(-15)">
+          <path d="M 0 0 Q 60 -20 110 20 Q 150 60 130 130 Q 100 200 40 200 Q -20 190 -40 130 Q -50 60 0 0 Z" fill="url(#leafA)"/>
+          <path d="M 20 30 Q 60 40 90 70 M 30 80 Q 70 90 100 110 M 40 130 Q 70 140 90 160" stroke="#2d5535" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <path d="M 0 0 L 60 180" stroke="#2d5535" stroke-width="2" fill="none" opacity="0.5"/>
+        </g>
+
+        <g transform="translate(430, 120)">
+          <path d="M 0 0 Q 5 200 20 400" stroke="#4a7a54" stroke-width="3" fill="none"/>
+          <path d="M 5 60 Q -30 40 -50 60 Q -30 80 5 70 Z" fill="url(#leafB)"/>
+          <path d="M 10 140 Q -25 120 -45 145 Q -25 165 10 152 Z" fill="url(#leafB)"/>
+          <path d="M 15 220 Q -20 200 -40 225 Q -20 245 15 232 Z" fill="url(#leafC)"/>
+          <path d="M 18 300 Q -15 280 -35 305 Q -15 325 18 312 Z" fill="url(#leafC)"/>
+        </g>
+
+        <g transform="translate(60, 350) rotate(20)">
+          <path d="M 0 0 Q 30 -30 80 -20 Q 130 -10 160 30 Q 180 70 150 100 Q 110 120 70 100 Q 30 80 0 40 Z" fill="url(#leafB)"/>
+          <path d="M 10 10 Q 60 5 120 25" stroke="#2d5535" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <path d="M 0 0 L 155 60" stroke="#2d5535" stroke-width="1.8" fill="none" opacity="0.5"/>
+        </g>
+
+        <g transform="translate(30, 560) rotate(-30)">
+          <path d="M 0 0 Q 40 -80 120 -140" stroke="#5a8564" stroke-width="2.5" fill="none"/>
+          <ellipse cx="15" cy="-15" rx="14" ry="6" fill="url(#leafC)" transform="rotate(-40 15 -15)"/>
+          <ellipse cx="35" cy="-40" rx="14" ry="6" fill="url(#leafC)" transform="rotate(-45 35 -40)"/>
+          <ellipse cx="60" cy="-70" rx="14" ry="6" fill="url(#leafC)" transform="rotate(-50 60 -70)"/>
+          <ellipse cx="85" cy="-100" rx="14" ry="6" fill="url(#leafC)" transform="rotate(-55 85 -100)"/>
+          <ellipse cx="110" cy="-130" rx="12" ry="5" fill="url(#leafC)" transform="rotate(-60 110 -130)"/>
+          <ellipse cx="5" cy="10" rx="14" ry="6" fill="url(#leafC)" transform="rotate(-30 5 10)"/>
+          <ellipse cx="25" cy="0" rx="14" ry="6" fill="url(#leafC)" transform="rotate(-35 25 0)"/>
+        </g>
+
+        <g transform="translate(280, 480) rotate(35)">
+          <path d="M 0 0 Q 40 20 60 70 Q 70 130 40 170 Q 10 150 -10 100 Q -20 40 0 0 Z" fill="url(#leafA)"/>
+          <path d="M 0 0 L 30 160" stroke="#1e3a24" stroke-width="1.5" fill="none" opacity="0.5"/>
+        </g>
+
+        <g transform="translate(390, 560)">
+          <circle cx="0" cy="0" r="6" fill="url(#berry)"/>
+          <circle cx="14" cy="-8" r="5" fill="url(#berry)"/>
+          <circle cx="24" cy="6" r="6" fill="url(#berry)"/>
+          <circle cx="8" cy="16" r="5" fill="url(#berry)"/>
+          <path d="M 0 -6 Q -5 -20 -15 -30 M 14 -14 Q 15 -30 8 -42" stroke="#4a7a54" stroke-width="1.5" fill="none"/>
+        </g>
+
+        <ellipse cx="200" cy="80" rx="30" ry="10" fill="url(#leafC)" opacity="0.7" transform="rotate(-20 200 80)"/>
+        <ellipse cx="150" cy="260" rx="26" ry="9" fill="url(#leafB)" opacity="0.8" transform="rotate(15 150 260)"/>
+        <ellipse cx="380" cy="620" rx="34" ry="12" fill="url(#leafC)" opacity="0.75" transform="rotate(-15 380 620)"/>
+
+        <g opacity="0.85">
+          <path d="M 240 700 Q 250 650 260 620 Q 268 590 280 570" stroke="#4a7a54" stroke-width="1.5" fill="none"/>
+          <ellipse cx="252" cy="640" rx="6" ry="3" fill="#a8c98f" transform="rotate(-30 252 640)"/>
+          <ellipse cx="266" cy="605" rx="6" ry="3" fill="#a8c98f" transform="rotate(-40 266 605)"/>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+</section>
+
+<!-- Supabase (the login service) + the club's auth code -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script>
+  // Already signed in? Skip the form.
+  getMyProfile().then((p) => {
+    if (p && p.active !== false) {
+      window.location.href = p.role === 'admin' ? 'admin.html' : 'members.html';
+    }
+  });
+</script>
+</body>
+</html>

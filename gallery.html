@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Goal Diggers Book Club</title>
+  <meta name="description" content="Moments from Goal Diggers Book Club meetings and events." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .masonry {
+      column-count: 3; column-gap: 18px;
+    }
+    .masonry .gallery-item { display:block; margin-bottom:18px; break-inside:avoid; }
+    @media (max-width: 900px) { .masonry { column-count: 2; } }
+    @media (max-width: 560px) { .masonry { column-count: 1; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar__logo">
+    <img src="logo.jpeg" alt="Goal Diggers Book Club Logo" class="navbar__logo-img" />
+    <span class="navbar__logo-text">Goal Diggers<span>Read · Reflect · Act</span></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  <div class="navbar__links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="book.html">Book of the Month</a>
+    <a href="events.html">Events</a>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html" class="active">Gallery</a>
+    <a href="shop.html">Shop</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Members</a>
+    <a href="donate.html" class="navbar__cta">Donate</a>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html" onclick="closeMenu()">Home</a>
+  <a href="about.html" onclick="closeMenu()">About</a>
+  <a href="book.html" onclick="closeMenu()">Book of the Month</a>
+  <a href="events.html" onclick="closeMenu()">Events</a>
+  <a href="blog.html" onclick="closeMenu()">Blog</a>
+  <a href="gallery.html" onclick="closeMenu()">Gallery</a>
+  <a href="shop.html" onclick="closeMenu()">Shop</a>
+  <a href="contact.html" onclick="closeMenu()">Contact</a>
+  <a href="login.html" onclick="closeMenu()">Members</a>
+  <a href="donate.html" onclick="closeMenu()">Donate</a>
+</div>
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  if (hamburger) hamburger.addEventListener('click', () => { hamburger.classList.toggle('open'); mobileNav.classList.toggle('open'); });
+  function closeMenu(){ if(hamburger){ hamburger.classList.remove('open'); mobileNav.classList.remove('open'); } }
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (nav) nav.style.height = window.scrollY > 60 ? '56px' : '68px';
+  });
+</script>
+
+<section class="page-hero">
+  <div class="bird" style="top:20%;left:-4%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div>
+  <span class="glow-line" style="bottom:14%;left:0;width:30%;animation-delay:1s" aria-hidden="true"></span>
+  <div class="container text-center">
+    <p class="section-label reveal visible">Gallery</p>
+    <h1 class="section-title reveal visible" style="font-size:clamp(2.4rem,5vw,3.8rem)">Moments <em>together</em></h1>
+    <div class="divider reveal visible"></div>
+    <p class="section-body reveal visible" style="margin:0 auto">Meetings, book launches, and school visits — the club in pictures.</p>
+  </div>
+</section>
+
+<section style="padding-top:30px">
+  <div class="container">
+    <div id="gallery" class="masonry"><p style="text-align:center;color:var(--color-muted)">Loading photos…</p></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h3>Goal Diggers Book Club</h3>
+        <p style="font-size:.94rem;max-width:380px;opacity:.9">A literary community in Kigali, Rwanda. We read one book a month and pay school fees for five sponsored children. Read · Reflect · Act.</p>
+      </div>
+      <div><h3>Explore</h3><ul class="footer-links"><li><a href="about.html">About Us</a></li><li><a href="book.html">Book of the Month</a></li><li><a href="events.html">Events</a></li><li><a href="blog.html">Blog</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="shop.html">Shop</a></li></ul></div>
+      <div><h3>Support</h3><ul class="footer-links"><li><a href="donate.html">Donate</a></li><li><a href="contact.html">Contact / Volunteer</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Goal Diggers Book Club · Kigali, Rwanda</span><span>Read · Reflect · Act.</span></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script src="public-content.js"></script>
+<script>loadGalleryGrid('gallery');</script>
+</body>
+</html>

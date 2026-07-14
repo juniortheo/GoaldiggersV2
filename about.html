@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — Goal Diggers Book Club</title>
+  <meta name="description" content="The story, mission, and values of Goal Diggers Book Club in Kigali, Rwanda." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR — same on every page. If you edit a link here,
+     make the same edit on the other pages too.
+     ============================================================ -->
+<nav class="navbar" id="navbar">
+  <a href="about.html" class="navbar__logo">
+    <img src="logo.jpeg" alt="Goal Diggers Book Club Logo" class="navbar__logo-img" />
+    <span class="navbar__logo-text">
+      Goal Diggers
+      <span>Read · Reflect · Act</span>
+    </span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  <div class="navbar__links">
+    <a href="index.html">Home</a>
+    <a href="about.html" class="active">About</a>
+    <a href="book.html">Book of the Month</a>
+    <a href="events.html">Events</a>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="shop.html" >Shop</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Members</a>
+    <a href="donate.html" class="navbar__cta">Donate</a>
+  </div>
+</nav>
+
+<!-- Mobile dropdown menu (shown when the hamburger is tapped) -->
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html" onclick="closeMenu()">Home</a>
+  <a href="about.html" onclick="closeMenu()">About</a>
+  <a href="book.html" onclick="closeMenu()">Book of the Month</a>
+  <a href="events.html" onclick="closeMenu()">Events</a>
+  <a href="blog.html" onclick="closeMenu()">Blog</a>
+  <a href="gallery.html" onclick="closeMenu()">Gallery</a>
+  <a href="shop.html" onclick="closeMenu()">Shop</a>
+  <a href="contact.html" onclick="closeMenu()">Contact</a>
+  <a href="login.html" onclick="closeMenu()">Members</a>
+  <a href="donate.html" onclick="closeMenu()">Donate</a>
+</div>
+
+<!-- Navbar behavior: hamburger toggle + shrink on scroll (self-contained) -->
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  if (hamburger) hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open'); mobileNav.classList.toggle('open');
+  });
+  function closeMenu(){ if(hamburger){ hamburger.classList.remove('open'); mobileNav.classList.remove('open'); } }
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (nav) nav.style.height = window.scrollY > 60 ? '56px' : '68px';
+  });
+</script>
+ 
+
+<section class="page-hero">
+  <div class="bird" style="top:20%;left:-4%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div> <div class="bird small" style="top:30%;left:-9%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div>
+  <span class="glow-line" style="bottom:14%;left:0;width:34%;animation-delay:1s" aria-hidden="true"></span>
+  <div class="container">
+    <p class="section-label reveal visible">About Us</p>
+    <h1 class="section-title reveal visible" style="font-size:clamp(2.4rem,5vw,3.8rem)">Curious minds, <em>generous hearts</em></h1>
+    <div class="divider reveal visible"></div>
+    <p class="section-body reveal visible">Goal Diggers is a literary community in Kigali uniting readers and big-hearted supporters — one book, one child, one conversation at a time.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container grid-2">
+    <div>
+      <p class="section-label reveal">Our story</p>
+      <h2 class="section-title reveal reveal-delay-1">How it <em>began</em></h2>
+      <div class="divider reveal reveal-delay-1"></div>
+      <!-- EDIT HERE — replace with the club's real founding story -->
+      <p class="section-body reveal reveal-delay-2">Write the club's origin story here — who started it, the first book you read together, and the moment the group decided to start paying school fees for children in the community.</p>
+      <p class="section-body reveal reveal-delay-2 mt-16">Today we read one book every month and sponsor five remarkable children through school, funded by members and monthly donors.</p>
+    </div>
+    <div class="photo-frame reveal reveal-delay-2">
+      <!-- EDIT HERE —bout-photo save a club photo as "about-photo.jpg" in the folder and change the src below -->
+      <img src="about us.jpg" alt="Goal Diggers Book Club members" />
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--color-cream)">
+  <div class="container">
+    <div class="text-center">
+      <p class="section-label reveal">What we believe</p>
+      <h2 class="section-title reveal reveal-delay-1">Read. Reflect. <em>Act.</em></h2>
+      <div class="divider reveal reveal-delay-1"></div>
+    </div>
+    <div class="grid-3 mt-40">
+      <div class="card reveal"><span class="tag">Read</span><h3>Curiosity</h3><p>One book a month, chosen together. Every voice at the table matters.</p></div>
+      <div class="card reveal reveal-delay-1"><span class="tag">Reflect</span><h3>Growth</h3><p>We use what we read to sharpen our thinking, our work, and our character.</p></div>
+      <div class="card reveal reveal-delay-2"><span class="tag">Act</span><h3>Generosity</h3><p>Education changed our lives. Sponsoring five children is how we pass the gift on.</p></div>
+    </div>
+    <div class="text-center mt-40 reveal">
+      <a href="donate.html" class="btn btn-green">Support a Child</a>
+    </div>
+  </div>
+</section>
+<!-- ============================================================
+     FOOTER — same on every page
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h3>Goal Diggers Book Club</h3>
+        <p style="font-size:.94rem;max-width:380px;opacity:.9">A literary community in Kigali, Rwanda. We read one book a month and pay school fees for five sponsored children. Read · Reflect · Act.</p>
+        <div class="social-row">
+          <a href="https://www.youtube.com/@Goaldiggersbookclubrw" aria-label="YouTube" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.5 15.6V8.4L15.8 12z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/goaldiggersrw/" aria-label="Instagram" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.2-.4-.4-1.1-.4-2.3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zM12 0C8.7 0 8.3 0 7.1.1 5.8.1 4.9.3 4.1.6c-.8.3-1.5.8-2.2 1.4C1.3 2.7.9 3.4.6 4.2c-.3.8-.5 1.7-.5 3C0 8.3 0 8.7 0 12s0 3.7.1 4.9c0 1.2.2 2.1.5 2.9.3.8.8 1.5 1.4 2.2.6.6 1.3 1.1 2.2 1.4.8.3 1.7.5 2.9.5 1.3.1 1.7.1 4.9.1s3.7 0 4.9-.1c1.2 0 2.1-.2 2.9-.5.8-.3 1.5-.8 2.2-1.4.6-.6 1.1-1.3 1.4-2.2.3-.8.5-1.7.5-2.9.1-1.3.1-1.7.1-4.9s0-3.7-.1-4.9c0-1.2-.2-2.1-.5-2.9a6 6 0 0 0-1.4-2.2A6 6 0 0 0 19.8.6c-.8-.3-1.7-.5-2.9-.5C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm7.8-10.4a1.4 1.4 0 1 1-2.9 0 1.4 1.4 0 0 1 2.9 0z"/></svg>
+          </a>
+          <a href="https://substack.com/@thegoaldiggersbookclub" aria-label="Substack" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M22.5 3.2H1.5v2.6h21zm0 5H1.5v2.6h21zM1.5 13.2V24l10.5-5.9L22.5 24V13.2z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h3>Explore</h3>
+        <ul class="footer-links">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="book.html">Book of the Month</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="shop.html">Shop</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Support</h3>
+        <ul class="footer-links">
+          <li><a href="donate.html">Donate</a></li>
+          <li><a href="contact.html">Contact / Volunteer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Goal Diggers Book Club · Kigali, Rwanda</span>
+      <span>Read · Reflect · Act.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- GSAP — powers the scroll-flying birds and photo parallax -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

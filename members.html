@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Members Area — Goal Diggers Book Club</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar__logo">
+    <img src="logo.jpeg" alt="Goal Diggers Book Club Logo" class="navbar__logo-img" />
+    <span class="navbar__logo-text">
+      Goal Diggers
+      <span>Read · Reflect · Act</span>
+    </span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  <div class="navbar__links">
+    <a href="index.html">Home</a>
+    <a href="book.html">Book of the Month</a>
+    <a href="events.html">Events</a>
+    <a href="members.html" class="active">Members</a>
+    <a href="#" onclick="handleLogout();return false;" class="navbar__cta">Log Out</a>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html" onclick="closeMenu()">Home</a>
+  <a href="book.html" onclick="closeMenu()">Book of the Month</a>
+  <a href="events.html" onclick="closeMenu()">Events</a>
+  <a href="members.html" onclick="closeMenu()">Members</a>
+  <a href="#" onclick="handleLogout();return false;">Log Out</a>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  if (hamburger) hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open'); mobileNav.classList.toggle('open');
+  });
+  function closeMenu(){ if(hamburger){ hamburger.classList.remove('open'); mobileNav.classList.remove('open'); } }
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (nav) nav.style.height = window.scrollY > 60 ? '56px' : '68px';
+  });
+</script>
+
+<section class="page-hero">
+  <div class="bird" style="top:20%;left:-4%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div>
+  <span class="glow-line" style="bottom:14%;left:0;width:30%;animation-delay:1s" aria-hidden="true"></span>
+  <div class="container">
+    <p class="section-label reveal visible">Members Only</p>
+    <h1 class="section-title reveal visible" style="font-size:clamp(2.4rem,5vw,3.8rem)">Hello, <em id="member-name">reader</em></h1>
+    <div class="divider reveal visible"></div>
+    <p class="section-body reveal visible">Club announcements, meeting venues, and everything we don't post publicly lives here.</p>
+  </div>
+</section>
+
+<section style="padding-top:30px">
+  <div class="container">
+    <p class="section-label reveal visible">Announcements</p>
+    <div id="announcements" class="mt-16">
+      <div class="card"><p>Loading announcements…</p></div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script>
+  (async () => {
+    // Kick out anyone who isn't a signed-in, active member
+    const profile = await requireMember();
+    if (!profile) return;
+
+    document.getElementById('member-name').textContent = profile.full_name || 'reader';
+
+    // Load announcements (newest first)
+    const { data: posts, error } = await db
+      .from('announcements')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    const wrap = document.getElementById('announcements');
+    if (error || !posts || posts.length === 0) {
+      wrap.innerHTML = '<div class="card"><p>No announcements yet — check back soon.</p></div>';
+      return;
+    }
+    wrap.innerHTML = posts.map((p) => `
+      <article class="card mt-16">
+        <span class="tag">${new Date(p.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+        <h3></h3>
+        <p style="white-space:pre-line"></p>
+      </article>`).join('');
+    // Fill titles/bodies as text (not HTML) so nothing can break the page
+    wrap.querySelectorAll('article').forEach((el, i) => {
+      el.querySelector('h3').textContent = posts[i].title;
+      el.querySelector('p').textContent = posts[i].body;
+    });
+  })();
+</script>
+</body>
+</html>

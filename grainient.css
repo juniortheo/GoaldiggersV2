@@ -1,0 +1,19 @@
+.grainient-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0; /* sit above background but beneath hero content */
+  opacity: 0.8; /* more visible */
+  transition: opacity .4s ease;
+}
+.grainient-container canvas { width: 100% !important; height: 100% !important; display: block; }
+
+/* small helper to keep hero content above the canvas */
+.hero { position: relative; }
+.hero .container { position: relative; z-index: 2; }
+.page-hero { position: relative; }
+.page-hero .container { position: relative; z-index: 2; }
+

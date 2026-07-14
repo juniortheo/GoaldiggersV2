@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Goal Diggers Book Club</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Tab bar */
+    .tab-bar { display:flex; flex-wrap:wrap; gap:6px; border-bottom:1px solid rgba(0,0,0,.1); margin-bottom:24px; }
+    .tab-btn {
+      background:none; border:none; padding:12px 18px; cursor:pointer;
+      font-family:'Jost',sans-serif; font-size:.85rem; letter-spacing:.08em; text-transform:uppercase;
+      color:var(--color-muted); border-bottom:2px solid transparent; margin-bottom:-1px;
+      transition:color .2s, border-color .2s;
+    }
+    .tab-btn:hover { color:var(--color-deep-green,#234a2b); }
+    .tab-btn.active { color:var(--color-deep-green,#234a2b); border-bottom-color:var(--color-gold,#b8894a); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+    /* Table styling */
+    .list-table { width:100%; border-collapse:collapse; font-size:.92rem; }
+    .list-table th { text-align:left; padding:10px; font-weight:500; letter-spacing:.06em; text-transform:uppercase; font-size:.72rem; color:var(--color-muted); border-bottom:1px solid rgba(0,0,0,.1); }
+    .list-table td { padding:12px 10px; border-bottom:1px solid rgba(0,0,0,.06); vertical-align:middle; }
+    .table-scroll { overflow-x:auto; }
+    .thumb { width:48px; height:48px; object-fit:cover; border-radius:6px; background:#eee; }
+    .row-actions { display:flex; gap:6px; }
+    .btn-sm { padding:6px 12px; font-size:.75rem; }
+
+    .pill { display:inline-block; padding:3px 10px; border-radius:999px; font-size:.72rem; }
+    .pill.on  { background:rgba(46,125,50,.12); color:#2e7d32; }
+    .pill.off { background:rgba(180,60,60,.12); color:#a33; }
+    .pill.gold { background:rgba(184,137,74,.15); color:var(--color-gold,#b8894a); }
+
+    /* Preview card for Substack fetch */
+    .preview {
+      display:flex; gap:14px; padding:14px; background:rgba(184,137,74,.06);
+      border:1px dashed var(--color-gold,#b8894a); border-radius:10px; margin-top:14px;
+    }
+    .preview img { width:110px; height:80px; object-fit:cover; border-radius:6px; }
+    .preview .preview-body h4 { margin:0 0 4px; font-family:'Cormorant Garamond',serif; font-size:1.15rem; }
+    .preview .preview-body p { margin:0; font-size:.85rem; color:var(--color-muted); }
+
+    .helper { font-size:.82rem; color:var(--color-muted); margin-top:6px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media (max-width:640px){ .form-row { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar__logo">
+    <img src="logo.jpeg" alt="Goal Diggers Book Club Logo" class="navbar__logo-img" />
+    <span class="navbar__logo-text">Goal Diggers<span>Read · Reflect · Act</span></span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  <div class="navbar__links">
+    <a href="index.html">Home</a>
+    <a href="members.html">Members Area</a>
+    <a href="admin.html" class="active">Admin</a>
+    <a href="#" onclick="handleLogout();return false;" class="navbar__cta">Log Out</a>
+  </div>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html" onclick="closeMenu()">Home</a>
+  <a href="members.html" onclick="closeMenu()">Members Area</a>
+  <a href="admin.html" onclick="closeMenu()">Admin</a>
+  <a href="#" onclick="handleLogout();return false;">Log Out</a>
+</div>
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  if (hamburger) hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open'); mobileNav.classList.toggle('open');
+  });
+  function closeMenu(){ if(hamburger){ hamburger.classList.remove('open'); mobileNav.classList.remove('open'); } }
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (nav) nav.style.height = window.scrollY > 60 ? '56px' : '68px';
+  });
+</script>
+
+<section class="page-hero">
+  <span class="glow-line" style="bottom:14%;left:0;width:30%;animation-delay:1s" aria-hidden="true"></span>
+  <div class="container">
+    <p class="section-label reveal visible">Admin Dashboard</p>
+    <h1 class="section-title reveal visible" style="font-size:clamp(2.4rem,5vw,3.8rem)">Club <em>controls</em></h1>
+    <div class="divider reveal visible"></div>
+    <p class="section-body reveal visible">Everything you post here goes live on the website instantly. Add members from Supabase → Authentication → Users; they appear in the Members tab automatically.</p>
+  </div>
+</section>
+
+<section style="padding-top:20px">
+  <div class="container">
+
+    <!-- ============ TAB BAR ============ -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('announcements')">Announcements</button>
+      <button class="tab-btn" onclick="switchTab('members')">Members</button>
+      <button class="tab-btn" onclick="switchTab('books')">Book of the Month</button>
+      <button class="tab-btn" onclick="switchTab('blog')">Blog</button>
+      <button class="tab-btn" onclick="switchTab('events')">Events</button>
+      <button class="tab-btn" onclick="switchTab('shop')">Shop</button>
+      <button class="tab-btn" onclick="switchTab('gallery')">Gallery</button>
+    </div>
+
+    <!-- ============ ANNOUNCEMENTS ============ -->
+    <div class="tab-panel active" id="tab-announcements">
+      <div class="card">
+        <span class="tag">New announcement</span>
+        <h3>Post to the members area</h3>
+        <form onsubmit="postAnnouncement(event)" class="mt-16">
+          <div class="form-field"><label for="ann-title">Title</label><input type="text" id="ann-title" required /></div>
+          <div class="form-field"><label for="ann-body">Message</label><textarea id="ann-body" rows="4" required></textarea></div>
+          <button type="submit" class="btn btn-green" id="ann-btn">Post Announcement</button>
+        </form>
+      </div>
+      <div class="card mt-24">
+        <span class="tag">Posted</span>
+        <h3>Recent announcements</h3>
+        <div id="ann-list" class="mt-16"><p>Loading…</p></div>
+      </div>
+    </div>
+
+    <!-- ============ MEMBERS ============ -->
+    <div class="tab-panel" id="tab-members">
+      <div class="card">
+        <span class="tag">Members</span>
+        <h3>Who can sign in</h3>
+        <p class="helper">Switch someone off to block their access instantly. Add new members in Supabase → Authentication → Users.</p>
+        <div class="table-scroll mt-16">
+          <table class="list-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th></th></tr></thead>
+            <tbody id="member-rows"><tr><td colspan="5">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ BOOKS ============ -->
+    <div class="tab-panel" id="tab-books">
+      <div class="card">
+        <span class="tag">Add a book</span>
+        <h3>New book of the month</h3>
+        <p class="helper">Only members will be able to read the PDF. The public sees the cover, title, and description.</p>
+        <form onsubmit="postBook(event)" class="mt-16">
+          <div class="form-row">
+            <div class="form-field"><label for="book-title">Title</label><input type="text" id="book-title" required /></div>
+            <div class="form-field"><label for="book-author">Author</label><input type="text" id="book-author" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-field"><label for="book-month">Reading month</label><input type="text" id="book-month" placeholder="March 2026" /></div>
+            <div class="form-field">
+              <label for="book-current">Set as current book?</label>
+              <select id="book-current"><option value="true">Yes — this is what we're reading now</option><option value="false">No — past book</option></select>
+            </div>
+          </div>
+          <div class="form-field"><label for="book-desc">Description</label><textarea id="book-desc" rows="3"></textarea></div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="book-cover">Cover image (public)</label>
+              <input type="file" id="book-cover" accept="image/*" />
+              <p class="helper">JPG or PNG. Shown on book.html to everyone.</p>
+            </div>
+            <div class="form-field">
+              <label for="book-pdf">PDF (members only)</label>
+              <input type="file" id="book-pdf" accept="application/pdf" />
+              <p class="helper">Only signed-in members can open it.</p>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-green" id="book-btn">Add Book</button>
+        </form>
+      </div>
+      <div class="card mt-24">
+        <span class="tag">Library</span>
+        <h3>All books</h3>
+        <div class="table-scroll mt-16">
+          <table class="list-table">
+            <thead><tr><th></th><th>Title</th><th>Month</th><th>Status</th><th></th></tr></thead>
+            <tbody id="book-rows"><tr><td colspan="5">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ BLOG ============ -->
+    <div class="tab-panel" id="tab-blog">
+      <div class="card">
+        <span class="tag">Add a Substack post</span>
+        <h3>Feature a new essay</h3>
+        <p class="helper">Paste your Substack link. We'll pull the image, title, and description automatically — you can tweak them before saving.</p>
+        <div class="form-field">
+          <label for="blog-url">Substack URL</label>
+          <input type="url" id="blog-url" placeholder="https://thegoaldiggersbookclub.substack.com/p/..." />
+          <button type="button" class="btn btn-outline-green btn-sm mt-16" onclick="fetchBlogPreview()" id="fetch-btn">Fetch Preview</button>
+        </div>
+        <div id="blog-preview" style="display:none">
+          <div class="preview">
+            <img id="preview-img" src="" alt="" />
+            <div class="preview-body">
+              <h4 id="preview-title"></h4>
+              <p id="preview-desc"></p>
+            </div>
+          </div>
+          <form onsubmit="postBlog(event)" class="mt-16">
+            <div class="form-field"><label for="blog-title">Title</label><input type="text" id="blog-title" required /></div>
+            <div class="form-field"><label for="blog-desc">Description</label><textarea id="blog-desc" rows="2" required></textarea></div>
+            <div class="form-field"><label for="blog-image">Image URL</label><input type="url" id="blog-image" /></div>
+            <button type="submit" class="btn btn-green" id="blog-btn">Publish Post</button>
+          </form>
+        </div>
+      </div>
+      <div class="card mt-24">
+        <span class="tag">Live posts</span>
+        <h3>Published essays</h3>
+        <div class="table-scroll mt-16">
+          <table class="list-table">
+            <thead><tr><th></th><th>Title</th><th>Link</th><th></th></tr></thead>
+            <tbody id="blog-rows"><tr><td colspan="4">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ EVENTS ============ -->
+    <div class="tab-panel" id="tab-events">
+      <div class="card">
+        <span class="tag">Add an event</span>
+        <h3>New event</h3>
+        <form onsubmit="postEvent(event)" class="mt-16">
+          <div class="form-field"><label for="ev-title">Event name</label><input type="text" id="ev-title" required /></div>
+          <div class="form-row">
+            <div class="form-field"><label for="ev-date">Date &amp; time</label><input type="datetime-local" id="ev-date" required /></div>
+            <div class="form-field"><label for="ev-venue">Venue</label><input type="text" id="ev-venue" placeholder="Norrsken House, Kigali" /></div>
+          </div>
+          <div class="form-field"><label for="ev-desc">Description</label><textarea id="ev-desc" rows="3"></textarea></div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="ev-ticket">Ticket purchase link</label>
+              <input type="url" id="ev-ticket" placeholder="https://..." />
+              <p class="helper">Shows as "Purchase Ticket" button on the events page. Leave blank for free events.</p>
+            </div>
+            <div class="form-field">
+              <label for="ev-image">Event image</label>
+              <input type="file" id="ev-image" accept="image/*" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-green" id="ev-btn">Add Event</button>
+        </form>
+      </div>
+      <div class="card mt-24">
+        <span class="tag">Scheduled</span>
+        <h3>Upcoming &amp; past events</h3>
+        <div class="table-scroll mt-16">
+          <table class="list-table">
+            <thead><tr><th></th><th>Event</th><th>When</th><th>Ticket</th><th></th></tr></thead>
+            <tbody id="event-rows"><tr><td colspan="5">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SHOP ============ -->
+    <div class="tab-panel" id="tab-shop">
+      <div class="card">
+        <span class="tag">Add a product</span>
+        <h3>New shop item</h3>
+        <p class="helper">Buyers tap "Buy on WhatsApp" — it opens WhatsApp with a pre-filled message asking about the item. Set the club WhatsApp number in <code>public-content.js</code>.</p>
+        <form onsubmit="postProduct(event)" class="mt-16">
+          <div class="form-field"><label for="p-name">Product name</label><input type="text" id="p-name" required /></div>
+          <div class="form-row">
+            <div class="form-field"><label for="p-price">Price (RWF)</label><input type="number" id="p-price" placeholder="15000" required /></div>
+            <div class="form-field">
+              <label for="p-available">Available?</label>
+              <select id="p-available"><option value="true">Yes — for sale</option><option value="false">Sold out / hidden</option></select>
+            </div>
+          </div>
+          <div class="form-field"><label for="p-desc">Description</label><textarea id="p-desc" rows="3"></textarea></div>
+          <div class="form-field"><label for="p-image">Product photo</label><input type="file" id="p-image" accept="image/*" /></div>
+          <button type="submit" class="btn btn-green" id="p-btn">Add Product</button>
+        </form>
+      </div>
+      <div class="card mt-24">
+        <span class="tag">Catalogue</span>
+        <h3>All products</h3>
+        <div class="table-scroll mt-16">
+          <table class="list-table">
+            <thead><tr><th></th><th>Name</th><th>Price</th><th>Status</th><th></th></tr></thead>
+            <tbody id="product-rows"><tr><td colspan="5">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ GALLERY ============ -->
+    <div class="tab-panel" id="tab-gallery">
+      <div class="card">
+        <span class="tag">Add photos</span>
+        <h3>Upload to the gallery</h3>
+        <p class="helper">Photos appear on the gallery page. Tick "Feature on homepage" to also show it on the homepage highlights.</p>
+        <form onsubmit="postGallery(event)" class="mt-16">
+          <div class="form-field"><label for="g-image">Photo</label><input type="file" id="g-image" accept="image/*" required /></div>
+          <div class="form-field"><label for="g-caption">Caption (optional)</label><input type="text" id="g-caption" placeholder="February meetup at Norrsken" /></div>
+          <div class="form-field">
+            <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="g-featured" style="width:auto" /> Feature on homepage</label>
+          </div>
+          <button type="submit" class="btn btn-green" id="g-btn">Upload Photo</button>
+        </form>
+      </div>
+      <div class="card mt-24">
+        <span class="tag">Gallery</span>
+        <h3>All photos</h3>
+        <div id="gallery-grid" class="grid-3 mt-16"><p>Loading…</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script>
+let ME = null;
+
+(async () => {
+  ME = await requireAdmin();
+  if (!ME) return;
+  loadAnnouncements(); loadMembers(); loadBooks(); loadBlog(); loadEvents(); loadProducts(); loadGallery();
+})();
+
+/* ---------- Tabs ---------- */
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+/* ---------- Helper: upload to public bucket, return public URL ---------- */
+async function uploadPublic(file, folder) {
+  const path = `${folder}/${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+  const { error } = await db.storage.from('public-images').upload(path, file);
+  if (error) throw error;
+  return db.storage.from('public-images').getPublicUrl(path).data.publicUrl;
+}
+
+/* ---------- Helper: upload PDF, return the path (not URL — private bucket) ---------- */
+async function uploadPdf(file) {
+  const path = `books/${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
+  const { error } = await db.storage.from('book-pdfs').upload(path, file);
+  if (error) throw error;
+  return path;
+}
+
+/* ============ ANNOUNCEMENTS ============ */
+async function postAnnouncement(e) {
+  e.preventDefault();
+  const title = document.getElementById('ann-title').value.trim();
+  const body = document.getElementById('ann-body').value.trim();
+  const btn = document.getElementById('ann-btn'); btn.disabled = true; btn.textContent = 'Posting…';
+  const { error } = await db.from('announcements').insert({ title, body, author: ME.id });
+  btn.disabled = false; btn.textContent = 'Post Announcement';
+  if (error) return authToast('Could not post. Try again.');
+  document.getElementById('ann-title').value = ''; document.getElementById('ann-body').value = '';
+  authToast('Announcement posted.'); loadAnnouncements();
+}
+async function loadAnnouncements() {
+  const { data: posts } = await db.from('announcements').select('*').order('created_at', { ascending: false }).limit(20);
+  const wrap = document.getElementById('ann-list');
+  if (!posts || !posts.length) { wrap.innerHTML = '<p>Nothing posted yet.</p>'; return; }
+  wrap.innerHTML = '';
+  posts.forEach(p => {
+    const d = document.createElement('div');
+    d.style.cssText = 'padding:12px 0;border-bottom:1px solid rgba(0,0,0,.06);display:flex;justify-content:space-between;gap:12px;align-items:center';
+    const left = document.createElement('div');
+    left.innerHTML = `<strong></strong><span style="font-size:.8rem;color:var(--color-muted)"> — ${new Date(p.created_at).toLocaleDateString()}</span>`;
+    left.querySelector('strong').textContent = p.title;
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-outline-green btn-sm'; btn.textContent = 'Delete';
+    btn.onclick = async () => { if (!confirm('Delete?')) return; await db.from('announcements').delete().eq('id', p.id); loadAnnouncements(); };
+    d.appendChild(left); d.appendChild(btn); wrap.appendChild(d);
+  });
+}
+
+/* ============ MEMBERS ============ */
+async function loadMembers() {
+  const { data: members } = await db.from('profiles').select('*').order('full_name');
+  const tbody = document.getElementById('member-rows');
+  if (!members) { tbody.innerHTML = '<tr><td colspan="5">Could not load.</td></tr>'; return; }
+  tbody.innerHTML = '';
+  members.forEach(m => {
+    const tr = document.createElement('tr');
+    const isMe = m.id === ME.id;
+    tr.innerHTML = `<td></td><td></td><td>${m.role === 'admin' ? 'Admin' : 'Member'}</td>
+      <td><span class="pill ${m.active ? 'on' : 'off'}">${m.active ? 'Active' : 'Blocked'}</span></td>
+      <td>${isMe ? '<span style="font-size:.8rem;color:var(--color-muted)">(you)</span>' : `<button class="btn btn-outline-green btn-sm" onclick="toggleMember('${m.id}', ${!m.active})">${m.active ? 'Block' : 'Restore'}</button>`}</td>`;
+    tr.children[0].textContent = m.full_name || '—';
+    tr.children[1].textContent = m.email || '—';
+    tbody.appendChild(tr);
+  });
+}
+async function toggleMember(id, makeActive) {
+  const { error } = await db.from('profiles').update({ active: makeActive }).eq('id', id);
+  if (error) return authToast('Could not update.');
+  authToast(makeActive ? 'Access restored.' : 'Access blocked.'); loadMembers();
+}
+
+/* ============ BOOKS ============ */
+async function postBook(e) {
+  e.preventDefault();
+  const btn = document.getElementById('book-btn'); btn.disabled = true; btn.textContent = 'Uploading…';
+  try {
+    const title = document.getElementById('book-title').value.trim();
+    const author = document.getElementById('book-author').value.trim();
+    const description = document.getElementById('book-desc').value.trim();
+    const reading_month = document.getElementById('book-month').value.trim();
+    const is_current = document.getElementById('book-current').value === 'true';
+    const coverFile = document.getElementById('book-cover').files[0];
+    const pdfFile = document.getElementById('book-pdf').files[0];
+
+    let cover_url = null, pdf_path = null;
+    if (coverFile) cover_url = await uploadPublic(coverFile, 'book-covers');
+    if (pdfFile) pdf_path = await uploadPdf(pdfFile);
+
+    // If this is the current book, unmark others first
+    if (is_current) await db.from('books').update({ is_current: false }).eq('is_current', true);
+
+    const { error } = await db.from('books').insert({ title, author, description, reading_month, is_current, cover_url, pdf_path });
+    if (error) throw error;
+
+    e.target.reset();
+    authToast('Book added.');
+    loadBooks();
+  } catch (err) {
+    authToast('Failed: ' + (err.message || 'unknown error'));
+  }
+  btn.disabled = false; btn.textContent = 'Add Book';
+}
+async function loadBooks() {
+  const { data: books } = await db.from('books').select('*').order('created_at', { ascending: false });
+  const tbody = document.getElementById('book-rows');
+  if (!books || !books.length) { tbody.innerHTML = '<tr><td colspan="5">No books yet.</td></tr>'; return; }
+  tbody.innerHTML = '';
+  books.forEach(b => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><img class="thumb" src="${b.cover_url || ''}" onerror="this.style.opacity=.2" /></td>
+      <td><strong></strong><br><span style="font-size:.82rem;color:var(--color-muted)"></span></td>
+      <td></td>
+      <td>${b.is_current ? '<span class="pill gold">Current</span>' : '<span class="pill" style="background:#eee;color:#888">Past</span>'}</td>
+      <td class="row-actions">
+        ${b.is_current ? '' : `<button class="btn btn-outline-green btn-sm" onclick="setCurrentBook('${b.id}')">Set current</button>`}
+        <button class="btn btn-outline-green btn-sm" onclick="deleteBook('${b.id}')">Delete</button>
+      </td>`;
+    tr.querySelector('strong').textContent = b.title;
+    tr.querySelector('span[style]').textContent = b.author;
+    tr.children[2].textContent = b.reading_month || '—';
+    tbody.appendChild(tr);
+  });
+}
+async function setCurrentBook(id) {
+  await db.from('books').update({ is_current: false }).eq('is_current', true);
+  await db.from('books').update({ is_current: true }).eq('id', id);
+  authToast('Set as current book.'); loadBooks();
+}
+async function deleteBook(id) {
+  if (!confirm('Delete this book?')) return;
+  await db.from('books').delete().eq('id', id);
+  loadBooks();
+}
+
+/* ============ BLOG (Substack fetch via microlink) ============ */
+async function fetchBlogPreview() {
+  const url = document.getElementById('blog-url').value.trim();
+  if (!url) return authToast('Paste a Substack URL first.');
+  const btn = document.getElementById('fetch-btn'); btn.disabled = true; btn.textContent = 'Fetching…';
+  try {
+    const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`);
+    const json = await res.json();
+    if (json.status !== 'success') throw new Error('Could not read that page');
+    const d = json.data;
+    document.getElementById('preview-img').src = (d.image && d.image.url) || '';
+    document.getElementById('preview-title').textContent = d.title || '';
+    document.getElementById('preview-desc').textContent = d.description || '';
+    document.getElementById('blog-title').value = d.title || '';
+    document.getElementById('blog-desc').value = d.description || '';
+    document.getElementById('blog-image').value = (d.image && d.image.url) || '';
+    document.getElementById('blog-preview').style.display = 'block';
+  } catch (e) {
+    authToast('Fetch failed — you can still fill in the fields by hand.');
+    document.getElementById('blog-preview').style.display = 'block';
+  }
+  btn.disabled = false; btn.textContent = 'Fetch Preview';
+}
+async function postBlog(e) {
+  e.preventDefault();
+  const url = document.getElementById('blog-url').value.trim();
+  const title = document.getElementById('blog-title').value.trim();
+  const description = document.getElementById('blog-desc').value.trim();
+  const image_url = document.getElementById('blog-image').value.trim();
+  const btn = document.getElementById('blog-btn'); btn.disabled = true; btn.textContent = 'Publishing…';
+  const { error } = await db.from('blog_posts').insert({ url, title, description, image_url });
+  btn.disabled = false; btn.textContent = 'Publish Post';
+  if (error) return authToast('Failed to publish.');
+  document.getElementById('blog-url').value = '';
+  document.getElementById('blog-preview').style.display = 'none';
+  authToast('Post published.'); loadBlog();
+}
+async function loadBlog() {
+  const { data: posts } = await db.from('blog_posts').select('*').order('created_at', { ascending: false });
+  const tbody = document.getElementById('blog-rows');
+  if (!posts || !posts.length) { tbody.innerHTML = '<tr><td colspan="4">No posts yet.</td></tr>'; return; }
+  tbody.innerHTML = '';
+  posts.forEach(p => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><img class="thumb" src="${p.image_url || ''}" onerror="this.style.opacity=.2" /></td>
+      <td><strong></strong></td>
+      <td><a href="${p.url}" target="_blank" style="color:var(--color-gold);font-size:.85rem">Open ↗</a></td>
+      <td><button class="btn btn-outline-green btn-sm" onclick="deleteBlog('${p.id}')">Delete</button></td>`;
+    tr.querySelector('strong').textContent = p.title;
+    tbody.appendChild(tr);
+  });
+}
+async function deleteBlog(id) {
+  if (!confirm('Delete this post?')) return;
+  await db.from('blog_posts').delete().eq('id', id); loadBlog();
+}
+
+/* ============ EVENTS ============ */
+async function postEvent(e) {
+  e.preventDefault();
+  const btn = document.getElementById('ev-btn'); btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const title = document.getElementById('ev-title').value.trim();
+    const description = document.getElementById('ev-desc').value.trim();
+    const event_date = new Date(document.getElementById('ev-date').value).toISOString();
+    const venue = document.getElementById('ev-venue').value.trim();
+    const ticket_url = document.getElementById('ev-ticket').value.trim() || null;
+    const imgFile = document.getElementById('ev-image').files[0];
+    let image_url = null;
+    if (imgFile) image_url = await uploadPublic(imgFile, 'events');
+    const { error } = await db.from('events').insert({ title, description, event_date, venue, ticket_url, image_url });
+    if (error) throw error;
+    e.target.reset(); authToast('Event added.'); loadEvents();
+  } catch (err) { authToast('Failed: ' + (err.message || 'error')); }
+  btn.disabled = false; btn.textContent = 'Add Event';
+}
+async function loadEvents() {
+  const { data: events } = await db.from('events').select('*').order('event_date', { ascending: false });
+  const tbody = document.getElementById('event-rows');
+  if (!events || !events.length) { tbody.innerHTML = '<tr><td colspan="5">No events yet.</td></tr>'; return; }
+  tbody.innerHTML = '';
+  events.forEach(ev => {
+    const isPast = new Date(ev.event_date) < new Date();
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><img class="thumb" src="${ev.image_url || ''}" onerror="this.style.opacity=.2" /></td>
+      <td><strong></strong><br><span style="font-size:.82rem;color:var(--color-muted)"></span></td>
+      <td>${new Date(ev.event_date).toLocaleString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })}
+          ${isPast ? '<br><span class="pill" style="background:#eee;color:#888">Past</span>' : ''}</td>
+      <td>${ev.ticket_url ? `<a href="${ev.ticket_url}" target="_blank" style="color:var(--color-gold);font-size:.85rem">Open ↗</a>` : '—'}</td>
+      <td><button class="btn btn-outline-green btn-sm" onclick="deleteEvent('${ev.id}')">Delete</button></td>`;
+    tr.querySelector('strong').textContent = ev.title;
+    tr.querySelector('span[style]').textContent = ev.venue || '';
+    tbody.appendChild(tr);
+  });
+}
+async function deleteEvent(id) {
+  if (!confirm('Delete this event?')) return;
+  await db.from('events').delete().eq('id', id); loadEvents();
+}
+
+/* ============ PRODUCTS ============ */
+async function postProduct(e) {
+  e.preventDefault();
+  const btn = document.getElementById('p-btn'); btn.disabled = true; btn.textContent = 'Adding…';
+  try {
+    const name = document.getElementById('p-name').value.trim();
+    const description = document.getElementById('p-desc').value.trim();
+    const price_rwf = parseInt(document.getElementById('p-price').value, 10);
+    const available = document.getElementById('p-available').value === 'true';
+    const imgFile = document.getElementById('p-image').files[0];
+    let image_url = null;
+    if (imgFile) image_url = await uploadPublic(imgFile, 'products');
+    const { error } = await db.from('products').insert({ name, description, price_rwf, available, image_url });
+    if (error) throw error;
+    e.target.reset(); authToast('Product added.'); loadProducts();
+  } catch (err) { authToast('Failed: ' + (err.message || 'error')); }
+  btn.disabled = false; btn.textContent = 'Add Product';
+}
+async function loadProducts() {
+  const { data: prods } = await db.from('products').select('*').order('created_at', { ascending: false });
+  const tbody = document.getElementById('product-rows');
+  if (!prods || !prods.length) { tbody.innerHTML = '<tr><td colspan="5">No products yet.</td></tr>'; return; }
+  tbody.innerHTML = '';
+  prods.forEach(p => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><img class="thumb" src="${p.image_url || ''}" onerror="this.style.opacity=.2" /></td>
+      <td><strong></strong></td>
+      <td>${p.price_rwf ? p.price_rwf.toLocaleString() + ' RWF' : '—'}</td>
+      <td><span class="pill ${p.available ? 'on' : 'off'}">${p.available ? 'For sale' : 'Hidden'}</span></td>
+      <td class="row-actions">
+        <button class="btn btn-outline-green btn-sm" onclick="toggleProduct('${p.id}', ${!p.available})">${p.available ? 'Hide' : 'Show'}</button>
+        <button class="btn btn-outline-green btn-sm" onclick="deleteProduct('${p.id}')">Delete</button>
+      </td>`;
+    tr.querySelector('strong').textContent = p.name;
+    tbody.appendChild(tr);
+  });
+}
+async function toggleProduct(id, makeAvailable) {
+  await db.from('products').update({ available: makeAvailable }).eq('id', id); loadProducts();
+}
+async function deleteProduct(id) {
+  if (!confirm('Delete this product?')) return;
+  await db.from('products').delete().eq('id', id); loadProducts();
+}
+
+/* ============ GALLERY ============ */
+async function postGallery(e) {
+  e.preventDefault();
+  const btn = document.getElementById('g-btn'); btn.disabled = true; btn.textContent = 'Uploading…';
+  try {
+    const imgFile = document.getElementById('g-image').files[0];
+    const caption = document.getElementById('g-caption').value.trim();
+    const featured = document.getElementById('g-featured').checked;
+    const image_url = await uploadPublic(imgFile, 'gallery');
+    const { error } = await db.from('gallery').insert({ image_url, caption, featured });
+    if (error) throw error;
+    e.target.reset(); authToast('Photo uploaded.'); loadGallery();
+  } catch (err) { authToast('Failed: ' + (err.message || 'error')); }
+  btn.disabled = false; btn.textContent = 'Upload Photo';
+}
+async function loadGallery() {
+  const { data: photos } = await db.from('gallery').select('*').order('created_at', { ascending: false });
+  const grid = document.getElementById('gallery-grid');
+  if (!photos || !photos.length) { grid.innerHTML = '<p>No photos yet.</p>'; return; }
+  grid.innerHTML = '';
+  photos.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.innerHTML = `
+      <div class="card-photo"><img src="${p.image_url}" /></div>
+      ${p.featured ? '<span class="tag gold">Featured</span>' : ''}
+      <p style="font-size:.85rem;margin-top:8px"></p>
+      <div class="row-actions mt-16">
+        <button class="btn btn-outline-green btn-sm" onclick="toggleFeature('${p.id}', ${!p.featured})">${p.featured ? 'Unfeature' : 'Feature'}</button>
+        <button class="btn btn-outline-green btn-sm" onclick="deletePhoto('${p.id}')">Delete</button>
+      </div>`;
+    div.querySelector('p').textContent = p.caption || '';
+    grid.appendChild(div);
+  });
+}
+async function toggleFeature(id, makeFeatured) {
+  await db.from('gallery').update({ featured: makeFeatured }).eq('id', id); loadGallery();
+}
+async function deletePhoto(id) {
+  if (!confirm('Delete this photo?')) return;
+  await db.from('gallery').delete().eq('id', id); loadGallery();
+}
+</script>
+</body>
+</html>
