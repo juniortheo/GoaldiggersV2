@@ -109,6 +109,33 @@
   .ge-description { margin: 0; color: var(--color-charcoal); line-height: 1.7; font-size: .94rem; max-height: 7.2rem; overflow: hidden; }
   .ge-actions { display: flex; align-items: flex-start; }
   .ge-actions .btn { padding: 12px 22px; }
+  .masonry {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px;
+    justify-items: center;
+    margin-top: 16px;
+  }
+  .masonry .gallery-item {
+    width: 100%;
+    max-width: 140px;
+    overflow: hidden;
+    border-radius: 14px;
+    background: var(--color-cream);
+    box-shadow: 0 12px 28px rgba(0,0,0,.08);
+  }
+  .masonry .gallery-item img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+  }
+  .masonry .gallery-item figcaption {
+    padding: 10px 8px;
+    font-size: .75rem;
+    color: var(--color-muted);
+    text-align: center;
+  }
   @media (max-width: 840px) {
     .ge-event { grid-template-columns: 1fr; }
     .ge-photo { min-height: 200px; }
