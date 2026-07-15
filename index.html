@@ -143,9 +143,8 @@
       <p class="section-label reveal">Our story</p>
       <h2 class="section-title reveal reveal-delay-1">How it <em>began</em></h2>
       <div class="divider reveal reveal-delay-1"></div>
-      <!-- EDIT HERE — replace with the club's real founding story -->
-      <p class="section-body reveal reveal-delay-2">Write the club's origin story here — who started it, the first book you read together, and the moment the group decided to start paying school fees for children in the community.</p>
-      <p class="section-body reveal reveal-delay-2 mt-16">Today we read one book every month and sponsor five remarkable children through school, funded by members and monthly donors.</p>
+      <p class="section-body reveal reveal-delay-2">Goal Diggers began in Kigali as a small circle of friends who wanted to do more than talk about books. From the first meeting — where we read together and imagined what a generous life might look like — the idea took shape: what if reading well and giving well could live in the same room?</p>
+      <p class="section-body reveal reveal-delay-2 mt-16">Today we're a growing community of readers in Kigali, meeting once a month around a chosen book, and paying school fees for five remarkable children whose futures we get to be part of. Every member is a reader. Every reader is a sponsor.</p>
     </div>
     <div class="photo-frame reveal reveal-delay-2">
       <!-- EDIT HERE —bout-photo save a club photo as "about-photo.jpg" in the folder and change the src below -->
@@ -238,85 +237,16 @@
   @media (max-width:600px){ .mg-item.w-l{ width:46vw; } .mg-item.w-m{ width:42vw; } .mg-item.w-s{ width:34vw; } .mg-wall{ gap:10px; } }
 </style>
 
-<section class="donate-section">
-  <div class="donate-form-wrap reveal">
-
-    <div class="donate-form-header">
-      <h3>Make your contribution</h3>
-      <p>Choose an amount in RWF, enter your phone number, and tap Pay — your MTN MoMo dialer opens instantly.</p>
+<section style="background:var(--color-cream);text-align:center">
+  <div class="container">
+    <p class="section-label reveal">Give &amp; Grow</p>
+    <h2 class="section-title reveal reveal-delay-1">Sponsor a child's <em>next chapter</em></h2>
+    <div class="divider reveal reveal-delay-1"></div>
+    <p class="section-body reveal reveal-delay-2" style="max-width:560px;margin:0 auto 8px">Your monthly gift pays school fees, uniforms, and meals for five children in our community. Every contribution has a name attached to it.</p>
+    <div class="mt-24 reveal reveal-delay-2">
+      <a href="donate.html" class="btn btn-green">Sponsor a Child</a>
     </div>
-
-    <div class="donate-form-body">
-
-      <!-- Frequency toggle -->
-      <div class="freq-toggle">
-        <button class="freq-btn active" id="freq-monthly" onclick="setFreq('monthly')">Monthly</button>
-        <button class="freq-btn"        id="freq-once"    onclick="setFreq('once')">One-time</button>
-      </div>
-
-      <!-- Quick amount pills (RWF) — EDIT the numbers to suit your donors -->
-      <div class="quick-amounts" id="quick-amounts">
-        <button class="quick-pill" data-amount="2000"  onclick="selectPill(this)">2,000</button>
-        <button class="quick-pill" data-amount="5000"  onclick="selectPill(this)">5,000</button>
-        <button class="quick-pill" data-amount="10000" onclick="selectPill(this)">10,000</button>
-        <button class="quick-pill" data-amount="25000" onclick="selectPill(this)">25,000</button>
-        <button class="quick-pill" data-amount="50000" onclick="selectPill(this)">50,000</button>
-      </div>
-
-      <!-- Custom amount -->
-      <div class="amount-row">
-        <span class="currency-label">RWF</span>
-        <input type="number" class="amount-input" id="amount-input"
-               placeholder="Enter amount" min="500"
-               oninput="clearPillSelection(); updateImpact()" />
-      </div>
-
-      <!-- Impact counter — updates live as they type -->
-      <div class="impact-counter" id="impact-counter" style="display:none">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <span id="impact-text"></span>
-      </div>
-
-      <!-- Phone number input -->
-      <div class="form-field" style="margin-top:18px">
-        <label for="donor-phone" style="font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--color-deep-green);display:block;margin-bottom:8px">Your MTN MoMo number</label>
-        <div style="display:flex;align-items:center;gap:0">
-          <span style="background:var(--color-cream);border:1px solid rgba(43,82,25,.22);border-right:none;border-radius:var(--radius) 0 0 var(--radius);padding:13px 14px;font-size:.9rem;color:var(--color-charcoal);white-space:nowrap">+250</span>
-          <input type="tel" id="donor-phone" class="amount-input"
-                 style="border-radius:0 var(--radius) var(--radius) 0;border-left:none"
-                 placeholder="78 000 0000" maxlength="9"
-                 oninput="this.value=this.value.replace(/\D/g,'')" />
-        </div>
-      </div>
-
-      <p class="donate-note" id="donate-note">
-        You're setting up a <strong>monthly</strong> gift. Dial the same code each month — we'll remind you.
-      </p>
-
-      <!-- PAY BUTTON -->
-      <button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
-        <span id="checkout-label">Pay with MTN MoMo</span>
-      </button>
-
-      <!-- Shows the USSD code after tap (useful on desktop where dialer can't open) -->
-      <div class="ussd-box" id="ussd-box" style="display:none;margin-top:18px;padding:16px;background:var(--color-cream);border:1px dashed var(--color-gold);border-radius:var(--radius);text-align:center">
-        <span style="font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--color-gold)">Your MoMo code</span>
-        <code id="ussd-code" style="display:block;font-size:1.05rem;font-weight:600;color:var(--color-deep-green);letter-spacing:.04em;margin:8px 0 12px;word-break:break-all"></code>
-        <button onclick="copyUssd()" style="background:none;border:1px solid var(--color-deep-green);border-radius:var(--radius);padding:8px 20px;cursor:pointer;font-family:var(--font-sans);font-size:.85rem;color:var(--color-deep-green)">Copy Code</button>
-      </div>
-
-      <div class="secure-note">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
-        </svg>
-        Payments go directly to the club's MTN Mobile Money — no middleman.
-      </div>
-
-    </div>
-  </div><!-- /donate-form-wrap -->
+  </div>
 </section>
 
 <!-- ============================================================

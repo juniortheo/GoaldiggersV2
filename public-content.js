@@ -156,7 +156,7 @@ async function loadGalleryGrid(containerId, opts = {}) {
   if (opts.featuredOnly) q = q.eq('featured', true);
   if (opts.limit) q = q.limit(opts.limit);
   const { data: photos } = await q;
-  if (!photos || !photos.length) { wrap.innerHTML = ''; return; }
+  if (!photos || !photos.length) { wrap.innerHTML = '<p style="text-align:center;color:var(--color-muted);grid-column:1/-1">No gallery photos yet — check back soon.</p>'; return; }
   wrap.innerHTML = photos.map(p => `
     <figure class="gallery-item" style="margin:0">
       <img src="${p.image_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block" />
