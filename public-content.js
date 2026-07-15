@@ -99,22 +99,28 @@ async function loadEvents(containerId) {
     const dateStr = d.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
     const timeStr = d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
     const ticket = ev.ticket_url
-      ? `<a href="${ev.ticket_url}" target="_blank" rel="noopener" class="btn btn-green mt-16">Purchase Ticket</a>`
-      : `<span class="tag mt-16">Free event</span>`;
+      ? `<a href="${ev.ticket_url}" target="_blank" rel="noopener" class="btn btn-green">Purchase Ticket</a>`
+      : `<span class="tag">Free event</span>`;
     return `
-      <article class="card">
-        <div class="card-photo"><img src="${ev.image_url || ''}" alt="" onerror="this.style.opacity=.2" /></div>
-        <span class="tag">${dateStr} · ${timeStr}</span>
-        <h3></h3>
-        <p style="font-size:.9rem;color:var(--color-muted)"></p>
-        <p style="white-space:pre-line"></p>
-        ${ticket}
+      <article class="ge-event">
+        <figure class="ge-photo"><img src="${ev.image_url || ''}" alt="${ev.title || 'Event photo'}" onerror="this.style.opacity=.2" /></figure>
+        <div class="ge-right">
+          <div>
+            <span class="ge-tag">${dateStr}</span>
+            <h3></h3>
+            <p class="ge-venue"></p>
+            <p class="ge-description"></p>
+          </div>
+          <div class="ge-actions">
+            ${ticket}
+          </div>
+        </div>
       </article>`;
   }).join('');
-  wrap.querySelectorAll('article').forEach((el, i) => {
+  wrap.querySelectorAll('.ge-event').forEach((el, i) => {
     el.querySelector('h3').textContent = events[i].title;
-    el.querySelector('p[style*="color:var(--color-muted)"]').textContent = events[i].venue || '';
-    el.querySelector('p[style*="white-space"]').textContent = events[i].description || '';
+    el.querySelector('.ge-venue').textContent = events[i].venue || '';
+    el.querySelector('.ge-description').textContent = events[i].description || '';
   });
 }
 
