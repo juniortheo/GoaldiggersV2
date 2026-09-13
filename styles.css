@@ -59,6 +59,42 @@ section { padding: var(--section-pad) 0; position: relative; }
 section#blog { padding: clamp(12px, 2.5vw, 28px) 0; }
 section.donate-section { padding: clamp(16px, 3vw, 32px) 0; }
 
+.scroll-hint {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  opacity: 0.6;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+@keyframes scrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+.wa-float {
+  position: fixed; bottom: 24px; right: 24px; z-index: 100;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #25D366; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 24px -6px rgba(37,211,102,0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+}
+.wa-float:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 30px -6px rgba(37,211,102,0.65);
+}
+@media (max-width: 600px) {
+  .wa-float { bottom: 16px; right: 16px; width: 50px; height: 50px; }
+  .wa-float svg { width: 24px; height: 24px; }
+}
+
 /* ============================================================
    TYPOGRAPHY
    ============================================================ */

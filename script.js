@@ -23,8 +23,8 @@ const io = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
-/* ---------- Logo fallback: hide broken image until logo.png exists ---------- */
-document.querySelectorAll('img[src="logo.png"]').forEach((img) => {
+/* ---------- Logo fallback: hide broken image until logo.jpeg exists ---------- */
+document.querySelectorAll('img[src="logo.jpeg"]').forEach((img) => {
   img.addEventListener('error', () => { img.style.display = 'none'; });
 });
 

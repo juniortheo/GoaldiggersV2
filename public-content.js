@@ -72,7 +72,7 @@ async function loadBlogPosts(containerId) {
   const wrap = document.getElementById(containerId);
   if (!wrap) return;
   const { data: posts } = await db.from('blog_posts').select('*').order('created_at', { ascending: false });
-  if (!posts || !posts.length) { wrap.innerHTML = '<p style="text-align:center;color:var(--color-muted);grid-column:1/-1">No essays yet — visit our Substack directly.</p>'; return; }
+  if (!posts || posts.length === 0) { wrap.innerHTML = '<p style="text-align:center;color:var(--color-muted);grid-column:1/-1;font-style:italic">Fresh essays and reflections coming soon.</p>'; return; }
   wrap.innerHTML = posts.map(p => `
     <article class="card">
       <div class="card-photo"><img src="${p.image_url || ''}" alt="" onerror="this.style.opacity=.2" /></div>
@@ -156,7 +156,7 @@ async function loadGalleryGrid(containerId, opts = {}) {
   if (opts.featuredOnly) q = q.eq('featured', true);
   if (opts.limit) q = q.limit(opts.limit);
   const { data: photos } = await q;
-  if (!photos || !photos.length) { wrap.innerHTML = '<p style="text-align:center;color:var(--color-muted);grid-column:1/-1">No gallery photos yet — check back soon.</p>'; return; }
+  if (!photos || photos.length === 0) { wrap.innerHTML = '<p style="text-align:center;color:var(--color-muted);grid-column:1/-1;font-style:italic">Photos from our Sunday gatherings coming soon.</p>'; return; }
   wrap.innerHTML = photos.map(p => `
     <figure class="gallery-item" style="margin:0">
       <img src="${p.image_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block" />
