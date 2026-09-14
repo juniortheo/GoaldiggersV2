@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Projects — Goal Diggers Book Club</title>
+  <meta name="description" content="How Goal Diggers Book Club translates reading and reflection into real action — through our Scholarship and Insurance programs in Kigali." />
+  <link rel="icon" type="image/jpeg" href="logo.jpeg" />
+  <link rel="apple-touch-icon" href="logo.jpeg" />
+  <meta property="og:title" content="Our Projects — Goal Diggers Book Club" />
+  <meta property="og:description" content="From reading to real change. See the two projects Goal Diggers Book Club runs in Kigali." />
+  <meta property="og:image" content="https://goaldiggers.rw/logo.jpeg" />
+  <meta property="og:url" content="https://goaldiggers.rw/projects.html" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Project cards specific to this page */
+    .project-card {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 40px;
+      align-items: center;
+      padding: 40px;
+      background: var(--color-warm-white, #fdfaf3);
+      border-radius: var(--radius-lg, 20px);
+      margin-bottom: 40px;
+      border: 1px solid rgba(138,117,48,.15);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 60px -24px rgba(85,107,47,.35);
+    }
+    .project-card.reversed { grid-template-columns: 1.1fr 1fr; }
+    .project-card.reversed .project-photo { order: 2; }
+    .project-card.reversed .project-text { order: 1; }
+    .project-photo {
+      aspect-ratio: 4/3;
+      border-radius: var(--radius, 12px);
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--color-soft-green, #7fa079), var(--color-deep-green, #234a2b));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-cream, #f0ecd6);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      text-align: center;
+      padding: 20px;
+    }
+    .project-photo img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .project-text h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      color: var(--color-black, #1a1a1a);
+      margin-bottom: 14px;
+      line-height: 1.15;
+    }
+    .project-text h3 em { color: var(--color-gold, #b8894a); font-style: italic; }
+    .project-text p { line-height: 1.7; color: var(--color-charcoal, #3a3a3a); margin-bottom: 12px; }
+    .project-meta {
+      display: flex; gap: 24px; margin: 18px 0;
+      padding: 14px 0; border-top: 1px solid rgba(0,0,0,.08); border-bottom: 1px solid rgba(0,0,0,.08);
+      flex-wrap: wrap;
+    }
+    .project-meta div {
+      font-family: 'Jost', sans-serif;
+    }
+    .project-meta .label {
+      font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--color-muted, #7a7a7a); margin-bottom: 3px;
+    }
+    .project-meta .value {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 600;
+      color: var(--color-deep-green, #234a2b);
+    }
+    @media (max-width: 780px) {
+      .project-card, .project-card.reversed { grid-template-columns: 1fr; padding: 24px; gap: 20px; }
+      .project-card.reversed .project-photo { order: 1; }
+      .project-card.reversed .project-text { order: 2; }
+    }
+
+    .criteria-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px; margin-top: 40px;
+    }
+    .criteria-item {
+      text-align: center; padding: 24px;
+    }
+    .criteria-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(184,137,74,.12); color: var(--color-gold, #b8894a);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .criteria-item h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; color: var(--color-black); margin-bottom: 8px;
+    }
+    .criteria-item p { font-size: 0.9rem; color: var(--color-muted); line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVBAR
+     ============================================================ -->
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar__logo">
+    <img src="logo.jpeg" alt="Goal Diggers Book Club Logo" class="navbar__logo-img" />
+    <span class="navbar__logo-text">
+      Goal Diggers
+      <span>Read · Reflect · Act</span>
+    </span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  <div class="navbar__links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="projects.html" class="active">Our Projects</a>
+    <a href="book.html">Book of the Month</a>
+    <a href="events.html">Events</a>
+    <a href="blog.html">Blog</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="shop.html">Shop</a>
+    <a href="contact.html">Contact</a>
+    <a href="login.html">Members</a>
+    <a href="donate.html" class="navbar__cta">Donate</a>
+  </div>
+</nav>
+
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html" onclick="closeMenu()">Home</a>
+  <a href="about.html" onclick="closeMenu()">About</a>
+  <a href="projects.html" onclick="closeMenu()">Our Projects</a>
+  <a href="book.html" onclick="closeMenu()">Book of the Month</a>
+  <a href="events.html" onclick="closeMenu()">Events</a>
+  <a href="blog.html" onclick="closeMenu()">Blog</a>
+  <a href="gallery.html" onclick="closeMenu()">Gallery</a>
+  <a href="shop.html" onclick="closeMenu()">Shop</a>
+  <a href="contact.html" onclick="closeMenu()">Contact</a>
+  <a href="login.html" onclick="closeMenu()">Members</a>
+  <a href="donate.html" onclick="closeMenu()">Donate</a>
+</div>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  if (hamburger) hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open'); mobileNav.classList.toggle('open');
+  });
+  function closeMenu(){ if(hamburger){ hamburger.classList.remove('open'); mobileNav.classList.remove('open'); } }
+  window.addEventListener('scroll', () => {
+    const nav = document.getElementById('navbar');
+    if (nav) nav.style.height = window.scrollY > 60 ? '56px' : '68px';
+  });
+</script>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="page-hero">
+  <div class="bird" style="top:20%;left:-4%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div>
+  <div class="bird small" style="top:30%;left:-9%;" aria-hidden="true"><svg viewBox="0 0 34 18" fill="none"><path d="M2 13 Q9 2 17 11 Q25 2 32 13" stroke="currentColor" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg></div>
+  <span class="glow-line" style="bottom:14%;left:0;width:34%;animation-delay:1s" aria-hidden="true"></span>
+  <div class="container">
+    <p class="section-label reveal visible">Our Projects</p>
+    <h1 class="section-title reveal visible" style="font-size:clamp(2.4rem,5vw,3.8rem)">From reading to <em>real change</em></h1>
+    <div class="divider reveal visible"></div>
+    <p class="section-body reveal visible">Every Sunday we gather at Fablab Rwanda to discuss a book. But we believe reading well is only half the work — the other half is showing up for people beyond the page. These are the two projects our community carries together.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     THE PURPOSE
+     ============================================================ -->
+<section>
+  <div class="container grid-2" style="gap:60px;align-items:start">
+    <div>
+      <p class="section-label reveal">The Why</p>
+      <h2 class="section-title reveal reveal-delay-1">Why we <em>act</em></h2>
+      <div class="divider reveal reveal-delay-1"></div>
+    </div>
+    <div>
+      <p class="section-body reveal reveal-delay-2">Books have a way of sharpening our conscience. We finish a chapter about injustice, generosity, or courage, and we can either close the book or let it change how we live the coming week.</p>
+      <p class="section-body reveal reveal-delay-2 mt-16">Goal Diggers chose the second path. Our projects are how a group of readers translates reflection into responsibility — quietly, locally, and for the long haul. They are not campaigns or one-time drives. They are commitments we renew, page after page, month after month.</p>
+      <p class="section-body reveal reveal-delay-2 mt-16">Every project we run answers three questions honestly: <em>Is it needed here?</em> <em>Can we sustain it?</em> <em>Does it treat people with dignity?</em> When the answer is yes to all three, we begin.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     THE TWO PROJECTS
+     ============================================================ -->
+<section style="background:var(--color-cream, #f0ecd6)">
+  <div class="container">
+    <div class="text-center" style="margin-bottom:50px">
+      <p class="section-label reveal">The Two</p>
+      <h2 class="section-title reveal reveal-delay-1">What we're <em>building</em></h2>
+      <div class="divider reveal reveal-delay-1"></div>
+    </div>
+
+    <!-- Scholarship Card -->
+    <div class="project-card reveal">
+      <div class="project-photo">
+        <img src="scholarship-hero.jpg" alt="Children in class" onerror="this.style.display='none';this.parentElement.innerHTML='Children reading — a photo from our sponsored classrooms will live here.'" />
+      </div>
+      <div class="project-text">
+        <span class="tag">Since 2024</span>
+        <h3>The <em>Scholarship</em> Program</h3>
+        <p>We pay full school fees, uniforms, books, and meals for five remarkable children in Kigali — from primary school all the way through secondary. It is our longest commitment and our proudest one.</p>
+        <div class="project-meta">
+          <div>
+            <div class="label">Children sponsored</div>
+            <div class="value">5</div>
+          </div>
+          <div>
+            <div class="label">Commitment</div>
+            <div class="value">Full K–S6</div>
+          </div>
+          <div>
+            <div class="label">Funded by</div>
+            <div class="value">Members &amp; donors</div>
+          </div>
+        </div>
+        <a href="scholarship.html" class="btn btn-green">Learn About the Scholarship</a>
+      </div>
+    </div>
+
+    <!-- Insurance Card -->
+    <div class="project-card reversed reveal reveal-delay-1">
+      <div class="project-photo">
+        <img src="abanyerondo-hero.jpg" alt="A night watchman on his rounds" onerror="this.style.display='none';this.parentElement.innerHTML='Portraits of the abanyerondo who keep our neighborhood safe.'" />
+      </div>
+      <div class="project-text">
+        <span class="tag">Since 2025</span>
+        <h3>Insurance for <em>Abanyerondo</em></h3>
+        <p>We cover annual Mutuelle de Santé for the night watchmen in our neighborhood — the men who walk our streets at three in the morning so the rest of us can sleep. Small monthly gifts from members buy a full year of health cover for a family.</p>
+        <div class="project-meta">
+          <div>
+            <div class="label">People covered</div>
+            <div class="value">Growing</div>
+          </div>
+          <div>
+            <div class="label">Renewal</div>
+            <div class="value">Annually</div>
+          </div>
+          <div>
+            <div class="label">Funded by</div>
+            <div class="value">Sunday circle</div>
+          </div>
+        </div>
+        <a href="insurance.html" class="btn btn-green">Learn About the Insurance Program</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     HOW WE CHOOSE
+     ============================================================ -->
+<section>
+  <div class="container">
+    <div class="text-center">
+      <p class="section-label reveal">Our Compass</p>
+      <h2 class="section-title reveal reveal-delay-1">How we <em>choose</em> our projects</h2>
+      <div class="divider reveal reveal-delay-1"></div>
+      <p class="section-body reveal reveal-delay-2" style="max-width:640px;margin:0 auto">We are a small community with real limits. So we have four rules for every project we take on — a compass we hold up before saying yes.</p>
+    </div>
+
+    <div class="criteria-grid">
+      <div class="criteria-item reveal">
+        <div class="criteria-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s-8-7.5-8-13a8 8 0 0 1 16 0c0 5.5-8 13-8 13z"/></svg></div>
+        <h4>Local</h4>
+        <p>Someone on our team should be able to visit, see, and be accountable in person.</p>
+      </div>
+      <div class="criteria-item reveal reveal-delay-1">
+        <div class="criteria-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg></div>
+        <h4>Real</h4>
+        <p>The need must be concrete and the impact must be measurable, not vague.</p>
+      </div>
+      <div class="criteria-item reveal reveal-delay-2">
+        <div class="criteria-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16M20 4v16M4 12h16"/></svg></div>
+        <h4>Sustainable</h4>
+        <p>We only start what our community can honestly keep going for years — not weeks.</p>
+      </div>
+      <div class="criteria-item reveal">
+        <div class="criteria-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <h4>Dignified</h4>
+        <p>No one we help is a mascot for our giving. Names, faces, and stories are shared only with consent.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA
+     ============================================================ -->
+<section style="background:var(--color-deep-green, #234a2b);color:var(--color-cream, #f0ecd6);text-align:center;position:relative;overflow:hidden">
+  <span class="glow-line" style="top:24%;left:0;width:40%;animation-delay:.5s" aria-hidden="true"></span>
+  <span class="glow-line" style="bottom:24%;right:0;left:auto;width:32%;transform-origin:right center;animation-delay:2.4s" aria-hidden="true"></span>
+  <div class="container">
+    <p class="section-label" style="color:var(--color-gold, #b8894a)">Join Us</p>
+    <h2 class="section-title reveal" style="color:var(--color-cream)">Reading is <em style="color:var(--color-gold-light, #d4b06a)">where we start</em></h2>
+    <div class="divider reveal" style="margin:22px auto"></div>
+    <p class="section-body reveal" style="margin:0 auto;color:rgba(240,236,224,.85);max-width:560px">Sponsor a child, cover a watchman's Mutuelle, come to a Sunday discussion, or send us the name of someone who could benefit. Every door in is a good one.</p>
+    <div class="mt-24 reveal" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="donate.html" class="btn btn-gold">Support a Project</a>
+      <a href="contact.html" class="btn btn-outline-green" style="border-color:var(--color-cream);color:var(--color-cream)">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h3>Goal Diggers Book Club</h3>
+        <p style="font-size:.94rem;max-width:380px;opacity:.9">A literary community in Kigali, Rwanda. We read one book each month, meeting every Sunday to discuss it, and pay school fees for five sponsored children. Read · Reflect · Act.</p>
+        <div class="social-row">
+          <a href="https://www.youtube.com/@Goaldiggersbookclubrw" aria-label="YouTube" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.5 15.6V8.4L15.8 12z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/goaldiggersrw/" aria-label="Instagram" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.2-.4-.4-1.1-.4-2.3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zM12 0C8.7 0 8.3 0 7.1.1 5.8.1 4.9.3 4.1.6c-.8.3-1.5.8-2.2 1.4C1.3 2.7.9 3.4.6 4.2c-.3.8-.5 1.7-.5 3C0 8.3 0 8.7 0 12s0 3.7.1 4.9c0 1.2.2 2.1.5 2.9.3.8.8 1.5 1.4 2.2.6.6 1.3 1.1 2.2 1.4.8.3 1.7.5 2.9.5 1.3.1 1.7.1 4.9.1s3.7 0 4.9-.1c1.2 0 2.1-.2 2.9-.5.8-.3 1.5-.8 2.2-1.4.6-.6 1.1-1.3 1.4-2.2.3-.8.5-1.7.5-2.9.1-1.3.1-1.7.1-4.9s0-3.7-.1-4.9c0-1.2-.2-2.1-.5-2.9a6 6 0 0 0-1.4-2.2A6 6 0 0 0 19.8.6c-.8-.3-1.7-.5-2.9-.5C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm7.8-10.4a1.4 1.4 0 1 1-2.9 0 1.4 1.4 0 0 1 2.9 0z"/></svg>
+          </a>
+          <a href="https://substack.com/@thegoaldiggersbookclub" aria-label="Substack" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M22.5 3.2H1.5v2.6h21zm0 5H1.5v2.6h21zM1.5 13.2V24l10.5-5.9L22.5 24V13.2z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h3>Explore</h3>
+        <ul class="footer-links">
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="projects.html">Our Projects</a></li>
+          <li><a href="book.html">Book of the Month</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Support</h3>
+        <ul class="footer-links">
+          <li><a href="donate.html">Donate</a></li>
+          <li><a href="scholarship.html">Scholarship Program</a></li>
+          <li><a href="insurance.html">Insurance Program</a></li>
+          <li><a href="contact.html">Contact / Volunteer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Goal Diggers Book Club · Kigali, Rwanda</span>
+      <span>Read · Reflect · Act.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
