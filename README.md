@@ -47,10 +47,10 @@ The photo sits behind a green color overlay (as requested). Both live in `styles
 ## 7. The Mobile Money checkout (donate page)
 
 When a visitor picks an amount and taps **Proceed to Checkout**:
-- **On a phone:** their dialer opens with `*182*1*1*0787430951*AMOUNT#` ready — they just press call to send the MoMo payment.
+- **On a phone:** their dialer opens with `*182*8*1*92452*AMOUNT#` ready — they just press call to send the MoMo payment.
 - **On a computer:** computers can't dial, so the code is displayed with a **Copy Code** button and a note to dial it on their phone.
 
-To change the receiving number: open `script.js` and edit **`MOMO_NUMBER`** (near the top, marked EDIT HERE). To change the suggested amounts: edit the `data-amount` numbers on the pills in `donate.html`.
+To change the receiving short code: open `script.js` and edit **`MOMO_CODE`** (near the top, marked EDIT HERE). The payment is in the name of **Elson Mupenzi**. To change the suggested amounts: edit the `data-amount` numbers on the pills in `donate.html`.
 
 > Note: "Monthly" here is a promise, not an automatic charge — USSD can't auto-bill. Donors dial the same code each month (the form says so honestly).
 

@@ -73,12 +73,13 @@ function showToast(msg, ms = 4000) {
    ============================================================ */
 
 /* ============================================================
-   EDIT HERE — MOBILE MONEY NUMBER
-   This is the MTN MoMo number donations are sent to.
+   EDIT HERE — MOBILE MONEY CODE
+   This is the MTN MoMo short code donations are sent to.
    The checkout builds the dial code:
-   *182*1*1*<NUMBER>*<AMOUNT>#
+   *182*8*1*<CODE>*<AMOUNT>#
    ============================================================ */
-const MOMO_NUMBER = '0787430951';
+const MOMO_CODE = '92452';
+const MOMO_RECEIVER = 'Elson Mupenzi';
 
 let currentFreq = 'monthly';
 function setFreq(freq) {
@@ -118,7 +119,7 @@ function updateCheckoutLabel() {
 
 /* ------------------------------------------------------------
    CHECKOUT — dials MTN Mobile Money directly:
-   *182*1*1*0787430951*AMOUNT#
+   *182*8*1*92452*AMOUNT#
    On a phone this opens the dialer with the code ready.
    On a computer (which can't dial) the code is shown with a
    Copy button instead, so nobody hits a dead end.
@@ -131,7 +132,7 @@ function handleCheckout() {
     return;
   }
 
-  const ussd = `*182*1*1*${MOMO_NUMBER}*${amount}#`;
+  const ussd = `*182*8*1*${MOMO_CODE}*${amount}#`;
 
   // Show the code on the page (works everywhere)
   const box = document.getElementById('ussd-box');
