@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Meet the people behind Goal Diggers Book Club, a Kigali community that reads, reflects, and acts together." />
+  <meta property="og:title" content="Our Team — Goal Diggers Book Club" />
+  <meta property="og:description" content="Meet the people behind Goal Diggers Book Club in Kigali." />
+  <meta property="og:url" content="https://goaldiggers.rw/team.html" />
+  <meta property="og:type" content="website" />
+  <title>Our Team — Goal Diggers Book Club</title>
+  <link rel="icon" type="image/png" href="logo gold.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="css/team.css" />
+</head>
+<body class="team-page">
+<nav class="navbar" id="navbar">
+  <a href="index.html" class="navbar__logo">
+    <img src="logo gold.png" alt="Goal Diggers Book Club Logo" class="navbar__logo-img" onerror="this.style.display='none'" />
+    <span class="navbar__logo-text">Goal Diggers<span>Read · Reflect · Act</span></span>
+  </a>
+  <ul class="navbar__links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="projects.html">Our Projects</a></li>
+    <li><a href="book.html">Book of the Month</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="team.html" class="active" aria-current="page">Our Team</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="donate.html" class="navbar__cta">Donate</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-nav" id="mobile-nav">
+  <a href="index.html" onclick="closeMenu()">Home</a>
+  <a href="about.html" onclick="closeMenu()">About</a>
+  <a href="projects.html" onclick="closeMenu()">Our Projects</a>
+  <a href="book.html" onclick="closeMenu()">Book of the Month</a>
+  <a href="events.html" onclick="closeMenu()">Events</a>
+  <a href="blog.html" onclick="closeMenu()">Blog</a>
+  <a href="shop.html" onclick="closeMenu()">Shop</a>
+  <a href="team.html" onclick="closeMenu()" aria-current="page">Our Team</a>
+  <a href="contact.html" onclick="closeMenu()">Contact</a>
+  <a href="donate.html" onclick="closeMenu()">Donate</a>
+</div>
+
+<main class="team-main">
+  <div class="doodle-layer" aria-hidden="true">
+    <svg class="team-doodle doodle-under doodle-zigzag doodle-float-a" viewBox="0 0 110 70"><path d="m5 55 18-43 15 46 19-50 17 45 18-37 14 26" /></svg>
+    <svg class="team-doodle doodle-under doodle-swoosh doodle-gold" viewBox="0 0 160 48"><path d="M5 34c39-20 91-21 147-4M125 23l27 7-18 13" /></svg>
+    <svg class="team-doodle doodle-over doodle-sparkle" viewBox="0 0 54 54"><path d="M27 3c2 16 8 22 24 24-16 2-22 8-24 24C25 35 19 29 3 27 19 25 25 19 27 3Z" /></svg>
+    <svg class="team-doodle doodle-under doodle-arrow" viewBox="0 0 150 100"><path d="M5 12c42 4 52 67 119 63m-20-17 22 17-27 8" /></svg>
+    <svg class="team-doodle doodle-under doodle-together doodle-handwritten doodle-float-b" viewBox="0 0 220 100"><path d="M12 48C19 10 193 4 208 44c15 39-165 60-193 13-8-15 1-31 19-39" /><text x="110" y="57" text-anchor="middle">together</text></svg>
+    <svg class="team-doodle doodle-under doodle-read-reflect doodle-handwritten doodle-gold" viewBox="0 0 230 110"><path d="M9 54C15 11 211 8 220 50c9 43-191 55-211 9-5-12 1-23 11-32" /><text x="115" y="62" text-anchor="middle">read · reflect · act</text></svg>
+    <svg class="team-doodle doodle-under doodle-since doodle-handwritten doodle-float-c" viewBox="0 0 230 90"><path d="M10 70c29-47 88-53 121-31m-17-5 19 5-10 18" /><text x="120" y="28" text-anchor="middle">since the beginning</text></svg>
+    <svg class="team-doodle doodle-under doodle-cross-one" viewBox="0 0 44 44"><path d="M9 22h26M22 9v26" /></svg>
+    <svg class="team-doodle doodle-over doodle-dots" viewBox="0 0 72 42"><circle cx="12" cy="22" r="4" /><circle cx="36" cy="11" r="3" /><circle cx="59" cy="26" r="4" /></svg>
+    <svg class="team-doodle doodle-over doodle-cross-two" viewBox="0 0 48 48"><path d="M9 24h30M24 9v30" /></svg>
+    <svg class="team-doodle doodle-under doodle-curl doodle-float-d" viewBox="0 0 220 420"><path d="M176 5c-92 30 28 86-61 130-68 34 30 75-39 117-45 28 11 66 66 50 58-18 30-74-18-59-34 11-30 48 6 45m66-241c-39 22 24 42-7 67-18 14-31 2-23-10" /></svg>
+    <svg class="team-doodle doodle-under doodle-spiral" viewBox="0 0 100 100"><path d="M50 51c-3 11-20 12-23 0-4-18 23-28 37-14 17 20 0 49-24 50C8 89-2 42 20 17 42-8 85 4 94 34" /></svg>
+    <svg class="team-doodle doodle-under doodle-committee doodle-handwritten" viewBox="0 0 220 110"><text x="110" y="57" text-anchor="middle">the committee</text><path d="M26 76v12h168V76" /></svg>
+    <svg class="team-doodle doodle-under doodle-footer-spiral doodle-gold" viewBox="0 0 80 80"><path d="M40 41c-2 9-16 10-19 0-3-14 18-22 30-11 14 16 0 40-20 41C7 74-2 36 16 16 34-3 68 5 77 29" /></svg>
+  </div>
+  <div class="team-topline" aria-hidden="true">
+    <span class="team-marker">00/</span>
+    <span class="team-wordmark"><span>GOAL</span> DIGGERS</span>
+  </div>
+  <section class="team-intro" aria-labelledby="team-title">
+    <div class="team-copy">
+      <p class="team-script">Our</p>
+      <h1 id="team-title">PEOPLE</h1>
+      <p class="team-description">We read, we reflect, we act. Goal Diggers is a Kigali book club turning monthly conversations into real support for our community — school fees for five children and health cover for the abanyerondo who keep our streets safe.</p>
+    </div>
+    <div class="team-collage-wrap">
+      <div class="team-grid" id="team-grid" aria-label="Goal Diggers team members"></div>
+    </div>
+  </section>
+  <div class="team-bottomline" aria-hidden="true">
+    <span>MEET THE TEAM</span>
+    <span class="team-bottom-arrow">→</span>
+  </div>
+</main>
+
+<div class="team-modal" id="team-modal" hidden>
+  <div class="team-modal-backdrop" data-modal-close></div>
+  <section class="team-profile" role="dialog" aria-modal="true" aria-labelledby="profile-name" tabindex="-1">
+    <span class="team-profile-marker" id="profile-marker">01/</span>
+    <button class="team-close" type="button" aria-label="Close profile"><span aria-hidden="true">×</span></button>
+    <div class="team-profile-copy">
+      <p class="team-profile-index" id="profile-index">01 / 12</p>
+      <h2 id="profile-name"></h2>
+      <p class="team-profile-role" id="profile-role"></p>
+      <p class="team-profile-bio" id="profile-bio"></p>
+      <div class="team-profile-controls">
+        <button type="button" class="team-profile-nav" data-profile-step="-1" aria-label="Previous team member">←</button>
+        <span class="team-profile-counter" id="profile-counter"></span>
+        <button type="button" class="team-profile-nav" data-profile-step="1" aria-label="Next team member">→</button>
+      </div>
+    </div>
+    <figure class="team-profile-print">
+      <div class="team-profile-image-wrap">
+        <img id="profile-image" alt="" />
+        <span class="team-profile-placeholder" aria-hidden="true"></span>
+      </div>
+    </figure>
+  </section>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h3>Goal Diggers Book Club</h3>
+        <p style="font-size:.94rem;max-width:380px;opacity:.9">A literary community in Kigali, Rwanda. We read one book each month, meeting every Sunday to discuss it, and pay school fees for five sponsored children. Read · Reflect · Act.</p>
+        <div class="social-row">
+          <a href="https://www.youtube.com/@Goaldiggersbookclubrw" aria-label="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.5 15.6V8.4L15.8 12z" /></svg></a>
+          <a href="https://www.instagram.com/goaldiggersrw/" aria-label="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.2 2.3.4.6.2 1 .5 1.4.9.4.4.7.8.9 1.4.2.4.4 1.1.4 2.3.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.2 1.9-.4 2.3-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1.1.4-2.3.4-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.2-2.3-.4a3.8 3.8 0 0 1-1.4-.9 3.8 3.8 0 0 1-.9-1.4c-.2-.4-.4-1.1-.4-2.3-.1-1.2-.1-1.6-.1-4.8s0-3.6.1-4.8c.1-1.2.2-1.9.4-2.3.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1.1-.4 2.3-.4 1.2-.1 1.6-.1 4.8-.1zM12 0C8.7 0 8.3 0 7.1.1 5.8.1 4.9.3 4.1.6c-.8.3-1.5.8-2.2 1.4C1.3 2.7.9 3.4.6 4.2c-.3.8-.5 1.7-.5 3C0 8.3 0 8.7 0 12s0 3.7.1 4.9c0 1.2.2 2.1.5 2.9.3.8.8 1.5 1.4 2.2.6.6 1.3 1.1 2.2 1.4.8.3 1.7.5 2.9.5 1.3.1 1.7.1 4.9.1s3.7 0 4.9-.1c1.2 0 2.1-.2 2.9-.5.8-.3 1.5-.8 2.2-1.4.6-.6 1.1-1.3 1.4-2.2.3-.8.5-1.7.5-2.9.1-1.3.1-1.7.1-4.9s0-3.7-.1-4.9c0-1.2-.2-2.1-.5-2.9a6 6 0 0 0-1.4-2.2A6 6 0 0 0 19.8.6c-.8-.3-1.7-.5-2.9-.5C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm7.8-10.4a1.4 1.4 0 1 1-2.9 0 1.4 1.4 0 0 1 2.9 0z" /></svg></a>
+          <a href="https://substack.com/@thegoaldiggersbookclub" aria-label="Substack" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M22.5 3.2H1.5v2.6h21zm0 5H1.5v2.6h21zM1.5 13.2V24l10.5-5.9L22.5 24V13.2z" /></svg></a>
+        </div>
+      </div>
+      <div>
+        <h3>Explore</h3>
+        <ul class="footer-links">
+          <li><a href="about.html">About</a></li>
+          <li><a href="projects.html">Our Projects</a></li>
+          <li><a href="book.html">Book of the Month</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="shop.html">Shop</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Support</h3>
+        <ul class="footer-links">
+          <li><a href="donate.html">Donate</a></li>
+          <li><a href="scholarship.html">Scholarship Program</a></li>
+          <li><a href="insurance.html">Insurance Program</a></li>
+          <li><a href="contact.html">Contact / Volunteer</a></li><li><a href="members.html">Members</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Goal Diggers Book Club · Kigali, Rwanda</span>
+      <span>Read · Reflect · Act.</span>
+    </div>
+  </div>
+</footer>
+<script src="js/team.js"></script>
+</body>
+</html>

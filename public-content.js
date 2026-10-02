@@ -30,7 +30,7 @@ async function loadCurrentBook(containerId) {
 
   wrap.innerHTML = `
     <div class="grid-2" style="align-items:center;gap:40px">
-      <div class="photo-frame"><img src="${book.cover_url || ''}" alt="" onerror="this.style.opacity=.2" /></div>
+      <div class="photo-frame book-cover-frame"><img src="${book.cover_url || ''}" alt="" onerror="this.style.opacity=.2" /></div>
       <div>
         <p class="section-label">${book.reading_month || 'Book of the Month'}</p>
         <h2 class="section-title" style="font-size:clamp(2rem,4vw,3rem)"></h2>
@@ -149,6 +149,24 @@ async function loadProducts(containerId) {
 }
 
 /* ---------- GALLERY ---------- */
+const defaultGalleryItems = [
+  { image_url: 'school.jpeg', caption: 'Scholarship Program', link: 'scholarship.html', span: 2 },
+  { image_url: 'abanyerondo.jpeg', caption: 'Insurance Program', link: 'insurance.html', span: 3 },
+  { image_url: 'how it began.jpeg', caption: 'Our Beginning', link: 'about.html', span: 2 },
+  { image_url: 'about us.jpg', caption: 'Goal Diggers Community', link: 'about.html', span: 3 },
+  { image_url: 'gathering.jpg', caption: 'Sunday Gatherings', link: 'events.html', span: 2 },
+  { image_url: 'books.jpg', caption: 'Book of the Month', link: 'book.html', span: 2 },
+  { image_url: 'home img 1.jpg', caption: 'Read · Reflect · Act', link: 'index.html', span: 3 },
+  { image_url: 'open book.webp', caption: 'Our Reading Culture', link: 'book.html', span: 2 },
+  { image_url: 'christa.jpg', caption: 'Club stories', link: 'events.html', span: 2 },
+  { image_url: 'elson.jpg', caption: 'Our community', link: 'about.html', span: 3 },
+  { image_url: 'ema.jpg', caption: 'Members in conversation', link: 'about.html', span: 2 },
+  { image_url: 'ema 2.jpg', caption: 'Moments together', link: 'events.html', span: 2 },
+  { image_url: 'eva.jpg', caption: 'Goal Diggers energy', link: 'index.html', span: 3 },
+  { image_url: 'cool.jpg', caption: 'Reading culture', link: 'book.html', span: 2 },
+  { image_url: 'lucid.jpg', caption: 'Community life', link: 'about.html', span: 3 }
+];
+
 async function loadGalleryGrid(containerId, opts = {}) {
   const wrap = document.getElementById(containerId);
   if (!wrap) return;
@@ -156,13 +174,32 @@ async function loadGalleryGrid(containerId, opts = {}) {
   if (opts.featuredOnly) q = q.eq('featured', true);
   if (opts.limit) q = q.limit(opts.limit);
   const { data: photos } = await q;
-  if (!photos || photos.length === 0) { wrap.innerHTML = '<p style="text-align:center;color:var(--color-muted);grid-column:1/-1;font-style:italic">Photos from our Sunday gatherings coming soon.</p>'; return; }
-  wrap.innerHTML = photos.map(p => `
-    <figure class="gallery-item" style="margin:0">
-      <img src="${p.image_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block" />
-      ${p.caption ? '<figcaption style="font-size:.82rem;color:var(--color-muted);margin-top:6px"></figcaption>' : ''}
-    </figure>`).join('');
+  const galleryItems = photos && photos.length ? photos : defaultGalleryItems;
+
+  function pickGalleryLink(imageUrl = '', caption = '') {
+    const text = `${imageUrl} ${caption}`.toLowerCase();
+    if (text.includes('school') || text.includes('scholar')) return 'scholarship.html';
+    if (text.includes('abanyerondo') || text.includes('insurance')) return 'insurance.html';
+    if (text.includes('how it began') || text.includes('about')) return 'about.html';
+    if (text.includes('event') || text.includes('gather') || text.includes('meeting')) return 'events.html';
+    if (text.includes('book')) return 'book.html';
+    return 'gallery.html';
+  }
+
+  wrap.innerHTML = galleryItems.map((p) => {
+    const item = p.image_url ? p : { image_url: p.src || p.image_url || '', caption: p.caption || '', link: p.link || pickGalleryLink(p.image_url || p.src || '', p.caption || '') };
+    const link = item.link || pickGalleryLink(item.image_url, item.caption || '');
+    const span = item.span || 2;
+    return `
+      <figure class="gallery-item" style="margin:0;--span:${span};">
+        <a href="${link}" aria-label="View related page" style="display:block;text-decoration:none;color:inherit;height:100%">
+          <img src="${item.image_url}" alt="${item.caption || ''}" style="width:100%;height:100%;object-fit:cover;border-radius:0;display:block" />
+        </a>
+        ${item.caption ? '<figcaption style="font-size:.82rem;color:var(--color-muted);margin-top:6px"></figcaption>' : ''}
+      </figure>`;
+  }).join('');
   wrap.querySelectorAll('figcaption').forEach((el, i) => {
-    if (photos[i].caption) el.textContent = photos[i].caption;
+    const caption = galleryItems[i]?.caption || '';
+    if (caption) el.textContent = caption;
   });
 }

@@ -43,6 +43,7 @@
     <li><a href="events.html" class="active">Events</a></li>
     <li><a href="blog.html">Blog</a></li>
     <li><a href="shop.html">Shop</a></li>
+    <li><a href="team.html">Our Team</a></li>
     <li><a href="contact.html">Contact</a></li>
         <li><a href="donate.html" class="navbar__cta">Donate</a></li>
   </ul>
@@ -58,6 +59,7 @@
   <a href="events.html" onclick="closeMenu()">Events</a>
   <a href="blog.html" onclick="closeMenu()">Blog</a>
   <a href="shop.html" onclick="closeMenu()">Shop</a>
+  <a href="team.html" onclick="closeMenu()">Our Team</a>
   <a href="contact.html" onclick="closeMenu()">Contact</a>
     <a href="donate.html" onclick="closeMenu()">Donate</a>
 </div>
@@ -122,27 +124,35 @@
   .ge-actions .btn { padding: 12px 22px; }
   .masonry {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-auto-rows: 120px;
     gap: 10px;
-    justify-items: center;
+    justify-items: stretch;
     margin-top: 16px;
   }
   .masonry .gallery-item {
     width: 100%;
-    max-width: 140px;
+    max-width: none;
     overflow: hidden;
-    border-radius: 14px;
+    border-radius: 0;
     background: var(--color-cream);
-    box-shadow: 0 12px 28px rgba(0,0,0,.08);
+    box-shadow: none;
+    margin: 0;
+    grid-row: span var(--span, 2);
+  }
+  .masonry .gallery-item a {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
   .masonry .gallery-item img {
     width: 100%;
-    height: 100px;
+    height: 100%;
     object-fit: cover;
     display: block;
   }
   .masonry .gallery-item figcaption {
-    padding: 10px 8px;
+    padding: 10px 8px 0;
     font-size: .75rem;
     color: var(--color-muted);
     text-align: center;
@@ -167,7 +177,7 @@
   <div class="container">
     <div class="text-center">
       <p class="section-label reveal">Gallery</p>
-      <h2 class="section-title reveal reveal-delay-1">Mosaic Gallery</h2>
+      <h2 class="section-title reveal reveal-delay-1">The Goal Diggers Journey</h2>
       <div class="divider reveal reveal-delay-1"></div>
     </div>
     <div id="events-gallery" class="masonry mt-24">Loading…</div>

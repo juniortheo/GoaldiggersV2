@@ -22,11 +22,21 @@
   <link rel="stylesheet" href="styles.css" />
   <style>
     .masonry {
-      column-count: 3; column-gap: 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-auto-rows: 120px;
+      gap: 10px;
     }
-    .masonry .gallery-item { display:block; margin-bottom:18px; break-inside:avoid; }
-    @media (max-width: 900px) { .masonry { column-count: 2; } }
-    @media (max-width: 560px) { .masonry { column-count: 1; } }
+    .masonry .gallery-item {
+      margin: 0;
+      overflow: hidden;
+      border-radius: 0;
+      grid-row: span var(--span, 2);
+    }
+    .masonry .gallery-item a { display:block; width:100%; height:100%; }
+    .masonry .gallery-item img { width:100%; height:100%; object-fit:cover; display:block; }
+    @media (max-width: 900px) { .masonry { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); } }
+    @media (max-width: 560px) { .masonry { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   </style>
 </head>
 <body>
@@ -45,6 +55,7 @@
     <a href="events.html">Events</a>
     <a href="blog.html">Blog</a>
     <a href="shop.html">Shop</a>
+    <a href="team.html">Our Team</a>
     <a href="contact.html">Contact</a>
         <a href="donate.html" class="navbar__cta">Donate</a>
   </div>
@@ -57,6 +68,7 @@
   <a href="events.html" onclick="closeMenu()">Events</a>
   <a href="blog.html" onclick="closeMenu()">Blog</a>
   <a href="shop.html" onclick="closeMenu()">Shop</a>
+  <a href="team.html" onclick="closeMenu()">Our Team</a>
   <a href="contact.html" onclick="closeMenu()">Contact</a>
     <a href="donate.html" onclick="closeMenu()">Donate</a>
 </div>
