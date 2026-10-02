@@ -9,7 +9,7 @@ const teamMembers = [
   { number: '08', name: 'Cindy Kalimba', role: 'Assistant Events Lead & Spokesperson', image: 'cindy.jpeg', bio: 'Cindy helps each event run smoothly and gives the club’s work a warm, clear voice. She knows the best conversations often begin with a simple welcome.' },
   { number: '09', name: 'Gavin Kanyoni', role: 'Head of Finance', image: 'gavin.jpeg', bio: 'Gavin looks after the numbers that help the club turn generosity into reliable support. He brings a clear eye, a calm hand, and a belief in doing things well.' },
   { number: '10', name: 'Trisha Ineza Ndahiro', role: 'Head of Administration', image: 'trisha.jpeg', bio: 'Trisha keeps the everyday work of the club organised and welcoming. She believes thoughtful structure gives good ideas room to grow.' },
-  { number: '11', name: 'Murwanashyaka Ivan Mafurebo', role: 'Head of Administration', image: 'ivan.jpg', bio: 'Ivan helps keep the club’s many moving pieces connected and on track. He brings patience to the process and purpose to the details.' },
+  { number: '11', name: 'Murwanashyaka Ivan Mafurebo', role: 'Head of Administration', image: 'ivan.jpeg', bio: 'Ivan helps keep the club’s many moving pieces connected and on track. He brings patience to the process and purpose to the details.' },
   { number: '12', name: 'Kelly Cyusa', role: 'Head of Communications', image: 'kelly.jpg', bio: 'Kelly helps the club speak with care, clarity, and a little literary spirit. She loves finding just the right words to bring people into the conversation.' }
 ];
 

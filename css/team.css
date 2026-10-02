@@ -32,9 +32,12 @@ body.team-page {
 .doodle-layer { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .team-doodle { position: absolute; display: block; overflow: visible; fill: none; stroke: var(--color-charcoal); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; vector-effect: non-scaling-stroke; }
 .team-doodle :is(path, circle, text) { fill: none; stroke: inherit; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2; vector-effect: non-scaling-stroke; }
-.doodle-under { z-index: 1; opacity: .75; }
+.doodle-layer text { fill: var(--color-black); stroke: none; opacity: 1; }
+.doodle-under { z-index: 1; }
+.doodle-under > :not(text) { opacity: .75; }
 .doodle-gold { stroke: var(--color-gold); }
-.doodle-over { z-index: 4; opacity: .35; }
+.doodle-over { z-index: 4; }
+.doodle-over > :not(text) { opacity: .35; }
 .doodle-handwritten { font-family: 'Caveat', cursive; }
 .doodle-handwritten text { font-size: 27px; stroke-width: .8; }
 .doodle-zigzag { top: 12%; left: 28%; width: clamp(56px, 7vw, 110px); transform: rotate(7deg); }
