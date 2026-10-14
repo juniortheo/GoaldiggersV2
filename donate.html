@@ -163,61 +163,87 @@
       </div>
     </div>
 
-    <!-- ============================================================
-         DONATION FORM — MTN Mobile Money checkout.
-         "Proceed to Checkout" dials *182*8*1*92452*AMOUNT#
-         (the code lives in script.js → search MOMO_CODE)
-         ============================================================ -->
+    <!-- Donation form -->
     <div class="donate-form-wrap reveal">
       <div class="donate-form-header">
         <span class="glow-line" style="top:70%;left:0;width:60%;animation-delay:1.2s" aria-hidden="true"></span>
         <p class="section-label">Give securely</p>
         <h3>Choose your contribution</h3>
-        <p>Choose an amount in Rwandan Francs. Checkout opens MTN Mobile Money on your phone.</p>
+        <p>Every contribution helps our community read, learn, and thrive.</p>
       </div>
-      <div class="donate-form-body">
-
-        <div class="freq-toggle">
-          <button class="freq-btn active" id="freq-monthly" onclick="setFreq('monthly')">Monthly</button>
-          <button class="freq-btn" id="freq-once" onclick="setFreq('once')">One-time</button>
+      <form class="donate-form-body" id="donation-form">
+        <div class="payment-field-row">
+          <fieldset class="payment-fieldset">
+            <legend>Giving frequency</legend>
+            <div class="freq-toggle" role="group" aria-label="Giving frequency">
+              <button class="freq-btn active" type="button" data-frequency="once" aria-pressed="true">One-time</button>
+              <button class="freq-btn" type="button" data-frequency="monthly" aria-pressed="false">Monthly</button>
+            </div>
+          </fieldset>
+          <div class="form-field">
+            <label for="donation-designation">Where should your gift go?</label>
+            <select id="donation-designation" required>
+              <option>Where most needed</option>
+              <option>Scholarship Program</option>
+              <option>Insurance Program (Mutuelle)</option>
+            </select>
+          </div>
         </div>
 
-        <!-- EDIT HERE — quick amount pills (RWF). Change the numbers to suit your donors. -->
-        <div class="quick-amounts" id="quick-amounts">
-          <button class="quick-pill" data-amount="2000"  onclick="selectPill(this)">2,000</button>
-          <button class="quick-pill" data-amount="5000"  onclick="selectPill(this)">5,000</button>
-          <button class="quick-pill" data-amount="10000" onclick="selectPill(this)">10,000</button>
-          <button class="quick-pill" data-amount="25000" onclick="selectPill(this)">25,000</button>
-          <button class="quick-pill" data-amount="50000" onclick="selectPill(this)">50,000</button>
-        </div>
-
+        <fieldset class="payment-fieldset">
+          <legend>Choose an amount</legend>
+          <div class="quick-amounts" id="quick-amounts">
+            <button class="quick-pill" type="button" data-rwf="10000">10,000 RWF</button>
+            <button class="quick-pill quick-pill-note" type="button" data-rwf="25000" data-description="keeps one child in school for a month"><strong>25,000 RWF</strong><span>keeps one child in school for a month</span></button>
+            <button class="quick-pill quick-pill-note" type="button" data-rwf="25000" data-description="insures one watchman family for a year"><strong>25,000 RWF</strong><span>insures one watchman family for a year</span></button>
+            <button class="quick-pill" type="button" data-rwf="50000">50,000 RWF</button>
+            <button class="quick-pill" type="button" data-rwf="100000">100,000 RWF</button>
+          </div>
+        </fieldset>
         <div class="amount-row">
-          <select class="currency-select" id="currency-select"><option value="RWF">RWF ₣</option></select>
-          <input type="number" class="amount-input" id="amount-input" placeholder="Enter amount" min="100"
-                 oninput="clearPillSelection(); updateCheckoutLabel()" />
+          <div class="form-field currency-field">
+            <label for="currency-select">Currency</label>
+            <select class="currency-select" id="currency-select"><option value="RWF">RWF · Rwanda</option><option value="USD">USD · International</option></select>
+          </div>
+          <div class="form-field amount-field">
+            <label for="amount-input">Custom amount</label>
+            <input type="number" class="amount-input" id="amount-input" placeholder="Enter amount" min="1" step="1" inputmode="decimal" required />
+          </div>
         </div>
-
-        <p class="donate-note" id="donate-note">You're setting up a <strong>monthly</strong> gift. Dial the same code each month — we'll remind you.</p>
-
-        <button class="checkout-btn" id="checkout-btn" onclick="handleCheckout()">
+        <div class="form-row payment-field-row">
+          <div class="form-field"><label for="donor-name">Full name</label><input id="donor-name" name="name" autocomplete="name" maxlength="120" required /></div>
+          <div class="form-field"><label for="donor-email">Email address</label><input id="donor-email" name="email" type="email" autocomplete="email" maxlength="254" required /></div>
+        </div>
+        <div class="form-row payment-field-row">
+          <div class="form-field"><label for="donor-phone">Phone <span>(optional)</span></label><input id="donor-phone" name="phone" type="tel" autocomplete="tel" maxlength="40" /></div>
+          <div class="form-field"><label for="donor-message">Message <span>(optional)</span></label><input id="donor-message" name="message" maxlength="500" /></div>
+        </div>
+        <label class="anonymous-option"><input type="checkbox" id="donation-anonymous" /> <span>Make my donation anonymous</span></label>
+        <p class="donate-note" id="donate-note">Choose a monthly gift to authorize automatic monthly charges through Flutterwave.</p>
+        <p class="donate-note">Already giving monthly? <a href="mailto:hello@goaldiggersrw.com?subject=Cancel%20monthly%20donation">Email the club to cancel</a>.</p>
+        <p class="payment-message" id="payment-message" hidden></p>
+        <button class="checkout-btn" id="checkout-btn" type="submit">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span id="checkout-label">Proceed to Checkout</span>
+          <span id="checkout-label">Donate securely</span>
         </button>
 
-        <!-- Shown after checkout: the MoMo dial code + copy button (for people on computers) -->
-        <div class="ussd-box" id="ussd-box">
-          <span style="font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--color-gold)">Your MoMo code</span>
-          <code id="ussd-code"></code>
-          <button class="btn btn-outline-green" style="padding:10px 22px" onclick="copyUssd()">Copy Code</button>
+        <div class="manual-payment">
+          <p class="section-label">Prefer a manual payment?</p>
+          <h4>MTN MoMo Pay</h4>
+          <p>Dial this code on your phone. MoMo Pay is available in RWF.</p>
+          <code id="momo-code">*182*8*1*92452*&lt;amount&gt;#</code>
+          <button class="btn btn-outline-green" type="button" id="copy-momo">Copy code</button>
+          <h4>Bank transfer</h4>
+          <p>Account name: <strong>[Club account name]</strong><br>Bank: <strong>[Bank name]</strong><br>Account number: <strong>[Account number]</strong><br>SWIFT: <strong>[SWIFT code]</strong></p>
         </div>
 
         <div class="secure-note">
           <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          Payments go straight to the club's MTN Mobile Money in the name of Elson Mupenzi — no middleman.
+          Card, bank transfer, MTN and Airtel mobile money, and USSD checkout is securely processed by Flutterwave.
         </div>
-
-      </div>
+      </form>
     </div>
+    <p class="donation-stats" id="donation-stats" aria-live="polite">Loading community giving totals…</p>
 
   </div>
 </section>
@@ -273,6 +299,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="script.js"></script>
+<script src="https://checkout.flutterwave.com/v3.js"></script>
+<script src="js/payments.js"></script>
+<script src="js/donations.js"></script>
 
 <a href="https://wa.me/250787430951?text=Hi%20Goal%20Diggers!%20I%20saw%20your%20website%20and%20wanted%20to%20reach%20out." target="_blank" rel="noopener" aria-label="Chat on WhatsApp" class="wa-float">
   <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2c-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.5-.5s.2-.3.3-.5c.1-.2 0-.4 0-.5s-.7-1.7-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.2.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>

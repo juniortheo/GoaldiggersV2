@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You — Goal Diggers Book Club</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    .payment-result { max-width: 680px; margin: 10vh auto; padding: clamp(24px, 5vw, 48px); background: #fff; border-top: 5px solid var(--color-gold); box-shadow: 0 20px 48px rgba(43,82,25,.12); }
+    .payment-result h1 { font-family: var(--font-serif); font-size: clamp(2.2rem, 8vw, 3.3rem); color: var(--color-deep-green); }
+    .payment-result p { margin: 12px 0; }
+    .ticket-code { padding: 14px; background: var(--color-cream); overflow-wrap: anywhere; font-weight: 600; }
+    .payment-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .payment-result img { display: block; width: min(260px, 100%); margin: 20px auto; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="payment-result" aria-live="polite">
+      <p class="section-label">Payment confirmed</p>
+      <h1 id="payment-heading">Payment status</h1>
+      <p id="payment-summary">This page needs to be opened from the secure checkout to display a confirmation.</p>
+      <div id="ticket-details" hidden></div>
+      <p id="monthly-cancel" hidden>To cancel a future monthly charge, email <a href="mailto:hello@goaldiggersrw.com?subject=Cancel%20monthly%20donation">hello@goaldiggersrw.com</a>.</p>
+      <div class="payment-actions">
+        <button class="btn btn-green" id="share-thanks" type="button">Share the good</button>
+        <a class="btn btn-outline-green" href="index.html">Back to the club</a>
+      </div>
+    </section>
+  </main>
+  <script>
+    let payment = null;
+    try { payment = JSON.parse(sessionStorage.getItem('gd-payment-result') || 'null'); } catch {}
+    if (payment) {
+      document.getElementById('payment-heading').textContent = 'Thank you for showing up.';
+      const money = `${Number(payment.amount).toLocaleString()} ${payment.currency}`;
+      if (payment.payment_type === 'donation') {
+        document.getElementById('payment-summary').textContent = `Your ${money} gift to ${payment.designation} is confirmed. Thank you for helping our community thrive.`;
+        document.getElementById('monthly-cancel').hidden = payment.frequency !== 'monthly';
+      }
+      if (payment.payment_type === 'ticket') {
+        document.getElementById('payment-summary').textContent = `${money} for ${payment.designation} is confirmed. Your ticket QR and reference are below.`;
+        const details = document.getElementById('ticket-details');
+        details.hidden = false;
+        details.innerHTML = '<p>Your event ticket is confirmed. Your ticket QR and reference have been sent by email.</p><p class="ticket-code"></p>';
+        details.querySelector('.ticket-code').textContent = payment.ticket_reference || payment.tx_ref;
+        if (payment.email_sent === false) {
+          const note = document.createElement('p');
+          note.textContent = 'Your QR code and ticket reference are shown here. Ticket email delivery is not configured yet; contact the club if you need a copy.';
+          details.appendChild(note);
+        }
+        if (payment.ticket_reference) {
+          const qr = document.createElement('img');
+          qr.alt = 'Ticket QR code';
+          qr.src = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(payment.ticket_reference)}`;
+          details.appendChild(qr);
+        }
+      }
+      if (payment.payment_type === 'order') document.getElementById('payment-summary').textContent = `Your ${money} shop order is confirmed.`;
+    }
+    document.getElementById('share-thanks').addEventListener('click', async () => {
+      const shareData = { title: 'Goal Diggers Book Club', text: 'I just supported the Goal Diggers Book Club community.', url: window.location.origin };
+      try { if (navigator.share) await navigator.share(shareData); else await navigator.clipboard.writeText(shareData.url); }
+      catch {}
+    });
+  </script>
+</body>
+</html>

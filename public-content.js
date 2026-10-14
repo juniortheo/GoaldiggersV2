@@ -98,9 +98,11 @@ async function loadEvents(containerId) {
     const d = new Date(ev.event_date);
     const dateStr = d.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
     const timeStr = d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
-    const ticket = ev.ticket_url
-      ? `<a href="${ev.ticket_url}" target="_blank" rel="noopener" class="btn btn-green">Purchase Ticket</a>`
-      : `<span class="tag">Free event</span>`;
+    const ticket = ev.is_ticketed && ev.ticket_tiers?.length
+      ? `<a href="event.html?id=${encodeURIComponent(ev.id)}" class="btn btn-green">View tickets</a>`
+      : ev.ticket_url
+        ? `<a href="${ev.ticket_url}" target="_blank" rel="noopener" class="btn btn-green">Purchase Ticket</a>`
+        : `<span class="tag">Free event</span>`;
     return `
       <article class="ge-event">
         <figure class="ge-photo"><img src="${ev.image_url || ''}" alt="${ev.title || 'Event photo'}" onerror="this.style.opacity=.2" /></figure>
@@ -130,21 +132,31 @@ async function loadProducts(containerId) {
   if (!wrap) return;
   const { data: prods } = await db.from('products').select('*').eq('available', true).order('created_at', { ascending: false });
   if (!prods || !prods.length) { wrap.innerHTML = '<p style="text-align:center;color:var(--color-muted);grid-column:1/-1">The shop is being restocked. Check back soon.</p>'; return; }
-  wrap.innerHTML = prods.map(p => {
-    const price = p.price_rwf ? p.price_rwf.toLocaleString() + ' RWF' : '';
-    const msg = encodeURIComponent(`Hi Goal Diggers! I'd like to buy: ${p.name}${price ? ' (' + price + ')' : ''}. How do I pay?`);
-    return `
-      <div class="card">
-        <div class="card-photo"><img src="${p.image_url || ''}" alt="" onerror="this.style.opacity=.2" /></div>
-        <span class="tag">${price || 'Contact for price'}</span>
-        <h3></h3>
-        <p></p>
-        <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${msg}" target="_blank" rel="noopener" class="btn btn-green mt-16">Buy on WhatsApp</a>
-      </div>`;
-  }).join('');
+  wrap.innerHTML = prods.map((p, index) => `
+    <article class="card shop-product" data-product-index="${index}">
+      <div class="card-photo"><img src="" alt="" onerror="this.style.opacity=.2" /></div>
+      <span class="tag product-price"></span>
+      <h3></h3>
+      <p></p>
+      <p class="product-stock"></p>
+      <label class="product-quantity-label">Quantity <select class="product-quantity"></select></label>
+      <button class="btn btn-green mt-16 add-to-cart" type="button">Add to cart</button>
+    </article>`).join('');
   wrap.querySelectorAll('.card').forEach((el, i) => {
+    const product = prods[i];
+    const img = el.querySelector('img');
+    img.src = product.image_url || '';
+    img.alt = product.name;
+    el.querySelector('.product-price').textContent = `${Number(product.price_rwf).toLocaleString()} RWF`;
     el.querySelector('h3').textContent = prods[i].name;
     el.querySelector('p:not(.mt-16)').textContent = prods[i].description || '';
+    const stock = Math.max(0, Number(product.stock) || 0);
+    el.querySelector('.product-stock').textContent = stock ? `${stock} available` : 'Sold out';
+    const quantity = el.querySelector('.product-quantity');
+    for (let count = 1; count <= Math.min(stock, 20); count += 1) quantity.add(new Option(String(count), String(count)));
+    const button = el.querySelector('.add-to-cart');
+    button.disabled = stock < 1;
+    button.addEventListener('click', () => window.ShopCart.add(product, Number(quantity.value)));
   });
 }
 

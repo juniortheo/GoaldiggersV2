@@ -51,6 +51,12 @@
     .helper { font-size:.82rem; color:var(--color-muted); margin-top:6px; }
     .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
     @media (max-width:640px){ .form-row { grid-template-columns:1fr; } }
+    .admin-filters { display:flex; flex-wrap:wrap; gap:12px; align-items:end; margin:16px 0; }
+    .admin-filters .form-field { min-width:140px; margin:0; }
+    .admin-summary { display:flex; flex-wrap:wrap; gap:12px; margin:14px 0; }
+    .admin-summary span { padding:10px 14px; background:rgba(184,137,74,.1); color:var(--color-deep-green); }
+    .cart-line { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid rgba(43,82,25,.12); }
+    .cart-line input { width:72px; }
   </style>
 </head>
 <body>
@@ -108,7 +114,40 @@
       <button class="tab-btn" onclick="switchTab('blog')">Blog</button>
       <button class="tab-btn" onclick="switchTab('events')">Events</button>
       <button class="tab-btn" onclick="switchTab('shop')">Shop</button>
+      <button class="tab-btn" onclick="switchTab('donations')">Donations</button>
+      <button class="tab-btn" onclick="switchTab('tickets')">Tickets</button>
       <button class="tab-btn" onclick="switchTab('gallery')">Gallery</button>
+    </div>
+
+    <!-- ============ DONATIONS ============ -->
+    <div class="tab-panel" id="tab-donations">
+      <div class="card">
+        <span class="tag">Fundraising</span>
+        <h3>Donations &amp; recurring giving</h3>
+        <div class="admin-summary"><span id="active-subscriptions">Active monthly donors: loading…</span><span id="monthly-income">Monthly recurring income: loading…</span></div>
+        <div id="designation-totals" class="admin-summary"></div>
+        <div class="admin-filters">
+          <div class="form-field"><label for="donation-status-filter">Status</label><select id="donation-status-filter"><option value="">All statuses</option><option>successful</option><option>pending</option><option>failed</option></select></div>
+          <div class="form-field"><label for="donation-from-filter">From</label><input id="donation-from-filter" type="date" /></div>
+          <div class="form-field"><label for="donation-to-filter">To</label><input id="donation-to-filter" type="date" /></div>
+          <div class="form-field"><label for="donation-designation-filter">Designation</label><select id="donation-designation-filter"><option value="">All designations</option><option>Scholarship Program</option><option>Insurance Program (Mutuelle)</option><option>Where most needed</option></select></div>
+          <button class="btn btn-green btn-sm" type="button" onclick="loadAdminDonations()">Apply filters</button>
+          <button class="btn btn-outline-green btn-sm" type="button" onclick="exportDonations()">Export CSV</button>
+        </div>
+        <p id="donation-admin-message" class="helper" role="status"></p>
+        <div class="table-scroll"><table class="list-table"><thead><tr><th>Date</th><th>Donor</th><th>Email</th><th>Amount</th><th>Designation</th><th>Frequency</th><th>Status</th></tr></thead><tbody id="donation-rows"><tr><td colspan="7">Loading…</td></tr></tbody></table></div>
+      </div>
+      <div class="card mt-24"><span class="tag">Recurring plans</span><h3>Monthly subscriptions</h3><div class="table-scroll mt-16"><table class="list-table"><thead><tr><th>Donor</th><th>Email</th><th>Amount</th><th>Designation</th><th>Started</th><th>Status</th></tr></thead><tbody id="subscription-rows"><tr><td colspan="6">Loading…</td></tr></tbody></table></div></div>
+    </div>
+
+    <!-- ============ TICKETS ============ -->
+    <div class="tab-panel" id="tab-tickets">
+      <div class="card"><span class="tag">Event sales</span><h3>Tickets &amp; attendees</h3>
+        <div class="admin-filters"><div class="form-field"><label for="ticket-event-filter">Event</label><select id="ticket-event-filter"><option value="">All events</option></select></div><button class="btn btn-outline-green btn-sm" type="button" onclick="exportAttendees()">Export attendee CSV</button></div>
+        <div id="ticket-sales-totals" class="admin-summary"></div>
+        <p id="ticket-admin-message" class="helper" role="status"></p>
+        <div class="table-scroll"><table class="list-table"><thead><tr><th>Ticket</th><th>Event</th><th>Buyer</th><th>Tier / Qty</th><th>Paid</th><th>Status</th><th>Check-in</th></tr></thead><tbody id="admin-ticket-rows"><tr><td colspan="7">Loading…</td></tr></tbody></table></div>
+      </div>
     </div>
 
     <!-- ============ ANNOUNCEMENTS ============ -->
@@ -243,9 +282,12 @@
           <div class="form-field"><label for="ev-desc">Description</label><textarea id="ev-desc" rows="3"></textarea></div>
           <div class="form-row">
             <div class="form-field">
-              <label for="ev-ticket">Ticket purchase link</label>
-              <input type="url" id="ev-ticket" placeholder="https://..." />
-              <p class="helper">Shows as "Purchase Ticket" button on the events page. Leave blank for free events.</p>
+              <label for="ev-tiers">Ticket tiers (one per line: Name | Price RWF | Quantity)</label>
+              <textarea id="ev-tiers" rows="3" placeholder="General | 10000 | 100&#10;Supporter | 25000 | 30"></textarea>
+              <p class="helper">Leave blank for a free event. Paid tiers use the shared Flutterwave checkout.</p>
+            </div>
+            <div class="form-field">
+              <label for="ev-cutoff">Ticket sales cutoff</label><input type="datetime-local" id="ev-cutoff" />
             </div>
             <div class="form-field">
               <label for="ev-image">Event image</label>
@@ -253,6 +295,7 @@
             </div>
           </div>
           <button type="submit" class="btn btn-green" id="ev-btn">Add Event</button>
+          <button type="button" class="btn btn-outline-green btn-sm" id="ev-cancel-edit" onclick="cancelEventEdit()" hidden>Cancel edit</button>
         </form>
       </div>
       <div class="card mt-24">
@@ -260,7 +303,7 @@
         <h3>Upcoming &amp; past events</h3>
         <div class="table-scroll mt-16">
           <table class="list-table">
-            <thead><tr><th></th><th>Event</th><th>When</th><th>Ticket</th><th></th></tr></thead>
+            <thead><tr><th></th><th>Event</th><th>When</th><th>Ticket tiers</th><th></th></tr></thead>
             <tbody id="event-rows"><tr><td colspan="5">Loading…</td></tr></tbody>
           </table>
         </div>
@@ -272,11 +315,12 @@
       <div class="card">
         <span class="tag">Add a product</span>
         <h3>New shop item</h3>
-        <p class="helper">Buyers tap "Buy on WhatsApp" — it opens WhatsApp with a pre-filled message asking about the item. Set the club WhatsApp number in <code>public-content.js</code>.</p>
+        <p class="helper">Buyers pay through the shared secure checkout. Stock is reduced only after Flutterwave verifies payment.</p>
         <form onsubmit="postProduct(event)" class="mt-16">
           <div class="form-field"><label for="p-name">Product name</label><input type="text" id="p-name" required /></div>
           <div class="form-row">
             <div class="form-field"><label for="p-price">Price (RWF)</label><input type="number" id="p-price" placeholder="15000" required /></div>
+            <div class="form-field"><label for="p-stock">Stock quantity</label><input type="number" id="p-stock" min="0" step="1" value="0" required /></div>
             <div class="form-field">
               <label for="p-available">Available?</label>
               <select id="p-available"><option value="true">Yes — for sale</option><option value="false">Sold out / hidden</option></select>
@@ -292,8 +336,8 @@
         <h3>All products</h3>
         <div class="table-scroll mt-16">
           <table class="list-table">
-            <thead><tr><th></th><th>Name</th><th>Price</th><th>Status</th><th></th></tr></thead>
-            <tbody id="product-rows"><tr><td colspan="5">Loading…</td></tr></tbody>
+            <thead><tr><th></th><th>Name</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr></thead>
+            <tbody id="product-rows"><tr><td colspan="6">Loading…</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -328,11 +372,18 @@
 <script src="auth.js"></script>
 <script>
 let ME = null;
+let EVENT_CACHE = [];
+let PRODUCT_CACHE = [];
+let DONATION_CACHE = [];
+let TICKET_CACHE = [];
+let EVENT_EDIT_ID = null;
+let PRODUCT_EDIT_ID = null;
 
 (async () => {
   ME = await requireAdmin();
   if (!ME) return;
   loadAnnouncements(); loadMembers(); loadBooks(); loadBlog(); loadEvents(); loadProducts(); loadGallery();
+  loadAdminDonations(); loadAdminSubscriptions(); loadAdminTickets();
 })();
 
 /* ---------- Tabs ---------- */
@@ -537,24 +588,34 @@ async function deleteBlog(id) {
 /* ============ EVENTS ============ */
 async function postEvent(e) {
   e.preventDefault();
-  const btn = document.getElementById('ev-btn'); btn.disabled = true; btn.textContent = 'Adding…';
+  const btn = document.getElementById('ev-btn'); btn.disabled = true; btn.textContent = EVENT_EDIT_ID ? 'Saving…' : 'Adding…';
   try {
     const title = document.getElementById('ev-title').value.trim();
     const description = document.getElementById('ev-desc').value.trim();
     const event_date = new Date(document.getElementById('ev-date').value).toISOString();
     const venue = document.getElementById('ev-venue').value.trim();
-    const ticket_url = document.getElementById('ev-ticket').value.trim() || null;
+    const ticket_tiers = document.getElementById('ev-tiers').value.split('\n').map((line) => line.split('|').map((part) => part.trim())).filter((parts) => parts.length === 3 && parts[0]).map(([name, price, quantity]) => ({ name, price: Number(price), quantity: Number(quantity) }));
+    if (ticket_tiers.some((tier) => !Number.isFinite(tier.price) || tier.price <= 0 || !Number.isInteger(tier.quantity) || tier.quantity < 1)) throw new Error('Ticket tiers need a positive RWF price and whole-number quantity.');
+    const cutoffValue = document.getElementById('ev-cutoff').value;
+    const ticket_cutoff = cutoffValue ? new Date(cutoffValue).toISOString() : null;
     const imgFile = document.getElementById('ev-image').files[0];
-    let image_url = null;
+    const currentEvent = EVENT_CACHE.find((item) => item.id === EVENT_EDIT_ID);
+    let image_url = currentEvent?.image_url || null;
     if (imgFile) image_url = await uploadPublic(imgFile, 'events');
-    const { error } = await db.from('events').insert({ title, description, event_date, venue, ticket_url, image_url });
+    const payload = { title, name: title, description, event_date, venue, ticket_url: null, image_url, ticket_tiers, ticket_cutoff, is_ticketed: ticket_tiers.length > 0 };
+    const wasEditing = Boolean(EVENT_EDIT_ID);
+    const result = EVENT_EDIT_ID
+      ? await db.from('events').update(payload).eq('id', EVENT_EDIT_ID)
+      : await db.from('events').insert(payload);
+    const { error } = result;
     if (error) throw error;
-    e.target.reset(); authToast('Event added.'); loadEvents();
+    e.target.reset(); cancelEventEdit(); authToast(wasEditing ? 'Event updated.' : 'Event added.'); loadEvents();
   } catch (err) { authToast('Failed: ' + (err.message || 'error')); }
-  btn.disabled = false; btn.textContent = 'Add Event';
+  btn.disabled = false; btn.textContent = EVENT_EDIT_ID ? 'Save Event' : 'Add Event';
 }
 async function loadEvents() {
   const { data: events } = await db.from('events').select('*').order('event_date', { ascending: false });
+  EVENT_CACHE = events || [];
   const tbody = document.getElementById('event-rows');
   if (!events || !events.length) { tbody.innerHTML = '<tr><td colspan="5">No events yet.</td></tr>'; return; }
   tbody.innerHTML = '';
@@ -566,12 +627,33 @@ async function loadEvents() {
       <td><strong></strong><br><span style="font-size:.82rem;color:var(--color-muted)"></span></td>
       <td>${new Date(ev.event_date).toLocaleString('en-GB', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' })}
           ${isPast ? '<br><span class="pill" style="background:#eee;color:#888">Past</span>' : ''}</td>
-      <td>${ev.ticket_url ? `<a href="${ev.ticket_url}" target="_blank" style="color:var(--color-gold);font-size:.85rem">Open ↗</a>` : '—'}</td>
-      <td><button class="btn btn-outline-green btn-sm" onclick="deleteEvent('${ev.id}')">Delete</button></td>`;
+      <td>${ev.ticket_tiers?.length ? `${ev.ticket_tiers.length} tier(s)` : 'Free event'}</td>
+      <td class="row-actions"><button class="btn btn-outline-green btn-sm" onclick="editEvent('${ev.id}')">Edit</button><button class="btn btn-outline-green btn-sm" onclick="deleteEvent('${ev.id}')">Delete</button></td>`;
     tr.querySelector('strong').textContent = ev.title;
     tr.querySelector('span[style]').textContent = ev.venue || '';
     tbody.appendChild(tr);
   });
+  loadAdminTickets();
+}
+function editEvent(id) {
+  const item = EVENT_CACHE.find((eventItem) => eventItem.id === id);
+  if (!item) return;
+  EVENT_EDIT_ID = id;
+  document.getElementById('ev-title').value = item.name || item.title || '';
+  document.getElementById('ev-desc').value = item.description || '';
+  document.getElementById('ev-date').value = new Date(item.event_date).toISOString().slice(0, 16);
+  document.getElementById('ev-venue').value = item.venue || '';
+  document.getElementById('ev-tiers').value = (item.ticket_tiers || []).map((tier) => `${tier.name} | ${tier.price} | ${tier.quantity}`).join('\n');
+  document.getElementById('ev-cutoff').value = item.ticket_cutoff ? new Date(item.ticket_cutoff).toISOString().slice(0, 16) : '';
+  document.getElementById('ev-btn').textContent = 'Save Event';
+  document.getElementById('ev-cancel-edit').hidden = false;
+  document.getElementById('tab-events').scrollIntoView({ behavior: 'smooth' });
+}
+function cancelEventEdit() {
+  EVENT_EDIT_ID = null;
+  document.getElementById('ev-btn').textContent = 'Add Event';
+  document.getElementById('ev-cancel-edit').hidden = true;
+  document.querySelector('#tab-events form').reset();
 }
 async function deleteEvent(id) {
   if (!confirm('Delete this event?')) return;
@@ -581,25 +663,32 @@ async function deleteEvent(id) {
 /* ============ PRODUCTS ============ */
 async function postProduct(e) {
   e.preventDefault();
-  const btn = document.getElementById('p-btn'); btn.disabled = true; btn.textContent = 'Adding…';
+  const btn = document.getElementById('p-btn'); btn.disabled = true; btn.textContent = PRODUCT_EDIT_ID ? 'Saving…' : 'Adding…';
   try {
     const name = document.getElementById('p-name').value.trim();
     const description = document.getElementById('p-desc').value.trim();
     const price_rwf = parseInt(document.getElementById('p-price').value, 10);
+    const stock = parseInt(document.getElementById('p-stock').value, 10);
     const available = document.getElementById('p-available').value === 'true';
     const imgFile = document.getElementById('p-image').files[0];
-    let image_url = null;
+    const currentProduct = PRODUCT_CACHE.find((product) => product.id === PRODUCT_EDIT_ID);
+    let image_url = currentProduct?.image_url || null;
     if (imgFile) image_url = await uploadPublic(imgFile, 'products');
-    const { error } = await db.from('products').insert({ name, description, price_rwf, available, image_url });
+    const payload = { name, description, price_rwf, stock, available, image_url, currency: 'RWF' };
+    const result = PRODUCT_EDIT_ID
+      ? await db.from('products').update(payload).eq('id', PRODUCT_EDIT_ID)
+      : await db.from('products').insert(payload);
+    const { error } = result;
     if (error) throw error;
-    e.target.reset(); authToast('Product added.'); loadProducts();
+    e.target.reset(); PRODUCT_EDIT_ID = null; btn.textContent = 'Add Product'; authToast('Product saved.'); loadProducts();
   } catch (err) { authToast('Failed: ' + (err.message || 'error')); }
-  btn.disabled = false; btn.textContent = 'Add Product';
+  btn.disabled = false; if (!PRODUCT_EDIT_ID) btn.textContent = 'Add Product';
 }
 async function loadProducts() {
   const { data: prods } = await db.from('products').select('*').order('created_at', { ascending: false });
+  PRODUCT_CACHE = prods || [];
   const tbody = document.getElementById('product-rows');
-  if (!prods || !prods.length) { tbody.innerHTML = '<tr><td colspan="5">No products yet.</td></tr>'; return; }
+  if (!prods || !prods.length) { tbody.innerHTML = '<tr><td colspan="6">No products yet.</td></tr>'; return; }
   tbody.innerHTML = '';
   prods.forEach(p => {
     const tr = document.createElement('tr');
@@ -607,14 +696,28 @@ async function loadProducts() {
       <td><img class="thumb" src="${p.image_url || ''}" onerror="this.style.opacity=.2" /></td>
       <td><strong></strong></td>
       <td>${p.price_rwf ? p.price_rwf.toLocaleString() + ' RWF' : '—'}</td>
+      <td>${Number(p.stock || 0)}</td>
       <td><span class="pill ${p.available ? 'on' : 'off'}">${p.available ? 'For sale' : 'Hidden'}</span></td>
       <td class="row-actions">
+        <button class="btn btn-outline-green btn-sm" onclick="editProduct('${p.id}')">Edit</button>
         <button class="btn btn-outline-green btn-sm" onclick="toggleProduct('${p.id}', ${!p.available})">${p.available ? 'Hide' : 'Show'}</button>
         <button class="btn btn-outline-green btn-sm" onclick="deleteProduct('${p.id}')">Delete</button>
       </td>`;
     tr.querySelector('strong').textContent = p.name;
     tbody.appendChild(tr);
   });
+}
+function editProduct(id) {
+  const product = PRODUCT_CACHE.find((item) => item.id === id);
+  if (!product) return;
+  PRODUCT_EDIT_ID = id;
+  document.getElementById('p-name').value = product.name || '';
+  document.getElementById('p-desc').value = product.description || '';
+  document.getElementById('p-price').value = product.price_rwf || '';
+  document.getElementById('p-stock').value = product.stock || 0;
+  document.getElementById('p-available').value = String(product.available);
+  document.getElementById('p-btn').textContent = 'Save Product';
+  document.getElementById('tab-shop').scrollIntoView({ behavior: 'smooth' });
 }
 async function toggleProduct(id, makeAvailable) {
   await db.from('products').update({ available: makeAvailable }).eq('id', id); loadProducts();
@@ -666,6 +769,144 @@ async function deletePhoto(id) {
   if (!confirm('Delete this photo?')) return;
   await db.from('gallery').delete().eq('id', id); loadGallery();
 }
+
+/* ============ PAYMENTS & TICKETS ============ */
+async function adminPaymentRequest(resource, params = {}, options = {}) {
+  const { data: { session } } = await db.auth.getSession();
+  if (!session?.access_token) throw new Error('Your admin session has expired. Sign in again.');
+  const query = new URLSearchParams({ resource, ...params });
+  const result = await fetch(`/.netlify/functions/admin-payments?${query}`, {
+    ...options,
+    headers: { authorization: `Bearer ${session.access_token}`, 'content-type': 'application/json', ...(options.headers || {}) },
+  });
+  const body = await result.json();
+  if (!result.ok) throw new Error(body.error || 'Could not load payment data.');
+  return body;
+}
+
+async function loadAdminDonations() {
+  const filters = {};
+  const status = document.getElementById('donation-status-filter').value;
+  const designation = document.getElementById('donation-designation-filter').value;
+  const from = document.getElementById('donation-from-filter').value;
+  const to = document.getElementById('donation-to-filter').value;
+  if (status) filters.status = status;
+  if (designation) filters.designation = designation;
+  if (from) filters.from = from;
+  if (to) filters.to = to;
+  const tbody = document.getElementById('donation-rows');
+  try {
+    const result = await adminPaymentRequest('donations', filters);
+    DONATION_CACHE = result.rows || [];
+    tbody.innerHTML = '';
+    if (!DONATION_CACHE.length) tbody.innerHTML = '<tr><td colspan="7">No donations match these filters.</td></tr>';
+    DONATION_CACHE.forEach((donation) => {
+      const row = document.createElement('tr');
+      const values = [new Date(donation.created_at).toLocaleString(), donation.is_anonymous ? 'Anonymous' : donation.donor_name, donation.donor_email, `${Number(donation.amount).toLocaleString()} ${donation.currency}`, donation.designation, donation.frequency === 'monthly' ? 'Monthly' : 'One-time', donation.status];
+      values.forEach((value) => { const cell = document.createElement('td'); cell.textContent = value || '—'; row.appendChild(cell); });
+      tbody.appendChild(row);
+    });
+    const totals = document.getElementById('designation-totals');
+    totals.replaceChildren();
+    Object.entries(result.totals || {}).forEach(([designationName, sum]) => {
+      const label = document.createElement('span'); label.textContent = `${designationName}: ${Number(sum).toLocaleString()}`; totals.appendChild(label);
+    });
+    document.getElementById('donation-admin-message').textContent = `${DONATION_CACHE.length} donation record(s)`;
+  } catch (error) {
+    tbody.innerHTML = '<tr><td colspan="7">Could not load donations.</td></tr>';
+    document.getElementById('donation-admin-message').textContent = error.message;
+  }
+}
+
+async function loadAdminSubscriptions() {
+  const tbody = document.getElementById('subscription-rows');
+  try {
+    const { rows = [] } = await adminPaymentRequest('subscriptions');
+    const active = rows.filter((subscription) => subscription.status === 'active');
+    const incomeByCurrency = {};
+    active.forEach((subscription) => { incomeByCurrency[subscription.currency] = (incomeByCurrency[subscription.currency] || 0) + Number(subscription.amount); });
+    document.getElementById('active-subscriptions').textContent = `Active monthly donors: ${new Set(active.map((subscription) => subscription.donor_email.toLowerCase())).size}`;
+    document.getElementById('monthly-income').textContent = `Monthly recurring income: ${Object.entries(incomeByCurrency).map(([currency, total]) => `${total.toLocaleString()} ${currency}`).join(' · ') || '0 RWF'}`;
+    tbody.innerHTML = '';
+    if (!rows.length) tbody.innerHTML = '<tr><td colspan="6">No monthly subscriptions yet.</td></tr>';
+    rows.forEach((subscription) => {
+      const row = document.createElement('tr');
+      [subscription.donor_name, subscription.donor_email, `${Number(subscription.amount).toLocaleString()} ${subscription.currency}`, subscription.designation, new Date(subscription.started_at).toLocaleDateString(), subscription.status].forEach((value) => {
+        const cell = document.createElement('td'); cell.textContent = value || '—'; row.appendChild(cell);
+      });
+      tbody.appendChild(row);
+    });
+  } catch (error) {
+    document.getElementById('active-subscriptions').textContent = 'Active monthly donors unavailable';
+    document.getElementById('monthly-income').textContent = error.message;
+    tbody.innerHTML = '<tr><td colspan="6">Could not load subscriptions.</td></tr>';
+  }
+}
+
+async function loadAdminTickets() {
+  const tbody = document.getElementById('admin-ticket-rows');
+  try {
+    const { rows = [] } = await adminPaymentRequest('tickets');
+    TICKET_CACHE = rows;
+    const filter = document.getElementById('ticket-event-filter');
+    const selectedId = filter.value;
+    filter.replaceChildren(new Option('All events', ''));
+    EVENT_CACHE.forEach((item) => filter.add(new Option(item.name || item.title, item.id)));
+    filter.value = selectedId;
+    const visible = rows.filter((ticket) => !filter.value || ticket.event_id === filter.value);
+    tbody.innerHTML = '';
+    if (!visible.length) tbody.innerHTML = '<tr><td colspan="7">No ticket records for this event.</td></tr>';
+    visible.forEach((ticket) => {
+      const row = document.createElement('tr');
+      const values = [ticket.ticket_reference, ticket.event_name, `${ticket.buyer_name} · ${ticket.buyer_email}`, `${ticket.tier} × ${ticket.quantity}`, `${Number(ticket.amount).toLocaleString()} ${ticket.currency}`, ticket.status, ticket.check_in_status ? 'Checked in' : 'Not checked in'];
+      values.forEach((value) => { const cell = document.createElement('td'); cell.textContent = value || '—'; row.appendChild(cell); });
+      if (ticket.status === 'successful' && !ticket.check_in_status) {
+        const action = document.createElement('button'); action.type = 'button'; action.className = 'btn btn-outline-green btn-sm'; action.textContent = 'Check in'; action.addEventListener('click', () => checkInTicket(ticket.id));
+        row.lastChild.replaceChildren(action);
+      }
+      tbody.appendChild(row);
+    });
+    const totals = new Map();
+    visible.filter((ticket) => ticket.status === 'successful').forEach((ticket) => {
+      const key = `${ticket.event_name} · ${ticket.tier}`;
+      const current = totals.get(key) || { quantity: 0, revenue: 0, currency: ticket.currency };
+      current.quantity += Number(ticket.quantity); current.revenue += Number(ticket.amount); totals.set(key, current);
+    });
+    const summary = document.getElementById('ticket-sales-totals'); summary.replaceChildren();
+    totals.forEach((total, key) => { const label = document.createElement('span'); label.textContent = `${key}: ${total.quantity} sold · ${total.revenue.toLocaleString()} ${total.currency}`; summary.appendChild(label); });
+    document.getElementById('ticket-admin-message').textContent = `${visible.filter((ticket) => ticket.status === 'successful').length} paid attendee record(s)`;
+  } catch (error) {
+    tbody.innerHTML = '<tr><td colspan="7">Could not load tickets.</td></tr>';
+    document.getElementById('ticket-admin-message').textContent = error.message;
+  }
+}
+
+async function checkInTicket(ticketId) {
+  try {
+    await adminPaymentRequest('tickets', {}, { method: 'POST', body: JSON.stringify({ action: 'check-in', ticket_id: ticketId }) });
+    authToast('Attendee checked in.'); loadAdminTickets();
+  } catch (error) { authToast(error.message); }
+}
+
+function downloadCsv(filename, rows) {
+  const csv = rows.map((row) => row.map((value) => `"${String(value ?? '').replace(/"/g, '""')}"`).join(',')).join('\r\n');
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  const link = document.createElement('a'); link.href = url; link.download = filename; link.click(); URL.revokeObjectURL(url);
+}
+
+function exportDonations() {
+  const columns = ['created_at', 'donor_name', 'donor_email', 'donor_phone', 'amount', 'currency', 'designation', 'frequency', 'tx_ref', 'status', 'is_anonymous', 'message'];
+  downloadCsv('goal-diggers-donations.csv', [columns, ...DONATION_CACHE.map((donation) => columns.map((column) => donation[column]))]);
+}
+
+function exportAttendees() {
+  const eventId = document.getElementById('ticket-event-filter').value;
+  const paid = TICKET_CACHE.filter((ticket) => ticket.status === 'successful' && (!eventId || ticket.event_id === eventId));
+  const columns = ['ticket_reference', 'event_name', 'buyer_name', 'buyer_email', 'donor_phone', 'tier', 'quantity', 'amount', 'currency', 'check_in_status'];
+  downloadCsv('goal-diggers-attendees.csv', [columns, ...paid.map((ticket) => columns.map((column) => ticket[column]))]);
+}
+
+document.getElementById('ticket-event-filter').addEventListener('change', loadAdminTickets);
 </script>
 </body>
 </html>

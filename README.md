@@ -12,12 +12,17 @@ Everything you need to run this site, in plain language.
 | `about.html` | About Us |
 | `book.html` | Book of the Month (with download button) |
 | `donate.html` | Donate — the 5 children + Mobile Money checkout |
+| `thank-you.html` / `payment-failed.html` | Verified payment result and retry states |
+| `event.html` | Per-event ticket tiers and checkout |
 | `events.html` | Events + volunteer call |
 | `blog.html` | Blog (links to Substack) |
 | `shop.html` | Shop — coming soon layout |
 | `contact.html` | Contact form + details |
 | `styles.css` | ALL the design (colors at the top in the COLOR CONTROL PANEL) |
-| `script.js` | Menu, animations, birds, donation checkout, contact form |
+| `script.js` | Menu, animations, birds, contact form |
+| `js/payments.js` | Shared Flutterwave checkout for donations, tickets, and shop orders |
+| `netlify/functions/` | Server-side payment creation, verification, webhook, and admin endpoints |
+| `supabase-payments.sql` | Payment, subscription, ticket, product-stock, and order schema/RPCs |
 
 **Keep every file in the SAME folder** — the pages share `styles.css` and `script.js`.
 
@@ -44,15 +49,30 @@ The photo sits behind a green color overlay (as requested). Both live in `styles
 - **Glowing lines** are `<span class="glow-line" ...>` elements. Copy/paste one to add more; change `top`/`left`/`width` to move it; `animation-delay` staggers them.
 - **Birds** fly forward as visitors scroll (powered by GSAP). They're `<div class="bird">` elements — copy one to add more. Add class `small` for a distant bird.
 
-## 7. The Mobile Money checkout (donate page)
+## 7. Payments and Netlify setup
 
-When a visitor picks an amount and taps **Proceed to Checkout**:
-- **On a phone:** their dialer opens with `*182*8*1*92452*AMOUNT#` ready — they just press call to send the MoMo payment.
-- **On a computer:** computers can't dial, so the code is displayed with a **Copy Code** button and a note to dial it on their phone.
+Deploy the repository through Netlify with the repository root as the publish directory. Add these values in **Netlify → Site configuration → Environment variables**; do not add real keys to this repository or any frontend file:
 
-To change the receiving short code: open `script.js` and edit **`MOMO_CODE`** (near the top, marked EDIT HERE). The payment is in the name of **Elson Mupenzi**. To change the suggested amounts: edit the `data-amount` numbers on the pills in `donate.html`.
+| Variable | Purpose |
+|---|---|
+| `FLW_PUBLIC_KEY` | Flutterwave inline checkout public key |
+| `FLW_SECRET_KEY` | Netlify-only transaction verification and payment-plan creation |
+| `FLW_WEBHOOK_HASH` | Secret value configured in Flutterwave webhook settings |
+| `SUPABASE_URL` | Supabase project URL |
+| `SUPABASE_ANON_KEY` | Public Supabase key used to validate admin sessions |
+| `SUPABASE_SERVICE_ROLE_KEY` | Netlify-only database access; never expose this key |
+| `RESEND_API_KEY` | Optional until ticket email delivery is enabled |
+| `RESEND_FROM_EMAIL` | Verified sender address used for ticket delivery |
 
-> Note: "Monthly" here is a promise, not an automatic charge — USSD can't auto-bill. Donors dial the same code each month (the form says so honestly).
+Run `supabase-setup.sql`, `supabase-setup-v2.sql`, then `supabase-payments.sql` in the Supabase SQL Editor. The last migration gives public visitors only an aggregate donation view; donor, order, and attendee details are service-role-only. After adding the Netlify variables, redeploy the site so the Functions use them.
+
+In Flutterwave, configure the webhook URL as `https://goaldiggers.rw/.netlify/functions/flw-webhook`, set its secret hash to the same `FLW_WEBHOOK_HASH`, and enable charge-completed plus subscription-created/activated/cancelled events. Ticket email delivery requires a Resend account with the sender domain verified and `RESEND_API_KEY`/`RESEND_FROM_EMAIL` configured. The QR contains the ticket's unique reference.
+
+To test, use Flutterwave **test** public and secret keys together (`FLWPUBK_TEST-…` and `FLWSECK_TEST-…`) and test-mode webhook configuration. For production, replace both with the matching **live** keys (`FLWPUBK-…` and `FLWSECK-…`), update the live webhook secret hash, and redeploy. Never mix a test public key with a live secret key or vice versa. The frontend receives only the public key from a Netlify Function; the secret remains server-side.
+
+Monthly gifts use Flutterwave payment plans and are charged automatically. Donors can request cancellation by emailing `hello@goaldiggers.rw`; the club must cancel the plan in Flutterwave, after which the cancellation webhook updates the admin status. To sell tickets, add the event's date, venue, description, image, tiers, capacities, and sales cutoff in **Admin → Events**. To sell products, set their RWF price and stock in **Admin → Shop**. Replace the visible bank-account placeholders in `donate.html` before launch.
+
+The Flutterwave inline flow supports card, bank transfer, Rwanda mobile money (MTN/Airtel), USSD, and account payments. MTN MoMo Pay remains visible as a manual RWF alternative.
 
 ## 8. The five children (privacy)
 

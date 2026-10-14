@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment Not Confirmed — Goal Diggers Book Club</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    .payment-result { max-width: 680px; margin: 10vh auto; padding: clamp(24px, 5vw, 48px); background: #fff; border-top: 5px solid #b84236; box-shadow: 0 20px 48px rgba(43,82,25,.12); }
+    .payment-result h1 { font-family: var(--font-serif); font-size: clamp(2.1rem, 8vw, 3rem); color: var(--color-deep-green); }
+    .payment-result p { margin: 12px 0; }
+    .manual-code { display:block; padding:14px; margin:16px 0; background:var(--color-cream); color:var(--color-deep-green); overflow-wrap:anywhere; }
+    .payment-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="payment-result" aria-live="polite">
+      <p class="section-label">Payment not confirmed</p>
+      <h1>Payment is not confirmed yet.</h1>
+      <p id="failure-message">You can retry checkout or make a manual MTN MoMo payment instead. If your account was charged, contact the club before paying again.</p>
+      <div id="manual-option">
+        <p>Manual MTN MoMo Pay, in RWF:</p>
+        <code class="manual-code" id="manual-code">*182*8*1*92452*&lt;amount&gt;#</code>
+      </div>
+      <div class="payment-actions">
+        <a class="btn btn-green" id="retry-link" href="donate.html">Retry checkout</a>
+        <a class="btn btn-outline-green" href="contact.html">Contact the club</a>
+      </div>
+    </section>
+  </main>
+  <script>
+    let failed = null;
+    try { failed = JSON.parse(sessionStorage.getItem('gd-payment-error') || 'null'); } catch {}
+    if (failed) {
+      document.getElementById('failure-message').textContent = `${failed.message || 'We could not confirm this payment.'} If your account was charged, contact the club with reference ${failed.tx_ref}.`;
+      if (failed.payment_type !== 'donation' || failed.currency !== 'RWF') document.getElementById('manual-option').hidden = true;
+      else if (Number(failed.amount) > 0) document.getElementById('manual-code').textContent = `*182*8*1*92452*${Math.floor(failed.amount)}#`;
+      document.getElementById('retry-link').href = failed.retry_url || `donate.html?amount=${encodeURIComponent(failed.amount || '')}&currency=${encodeURIComponent(failed.currency || 'RWF')}`;
+      if (failed.payment_type === 'ticket') document.getElementById('retry-link').textContent = 'Choose tickets again';
+      if (failed.payment_type === 'order') document.getElementById('retry-link').textContent = 'Return to the shop';
+    }
+  </script>
+</body>
+</html>

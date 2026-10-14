@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Tickets — Goal Diggers Book Club</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    .event-detail { display:grid; grid-template-columns:minmax(0, 1.1fr) minmax(280px, .9fr); gap:32px; align-items:start; padding:clamp(24px, 5vw, 56px) 0; }
+    .event-detail h1 { font-family:var(--font-serif); color:var(--color-deep-green); font-size:clamp(2.2rem, 7vw, 3.6rem); }
+    .event-image { width:100%; max-height:520px; aspect-ratio:4/3; object-fit:cover; }
+    .ticket-tier { display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid rgba(43,82,25,.16); }
+    .event-ticket-form { padding:24px; background:#fff; border-top:4px solid var(--color-gold); box-shadow:0 16px 34px rgba(43,82,25,.1); }
+    .event-ticket-form .form-field { margin:14px 0; }
+    .event-ticket-form label { display:block; margin-bottom:5px; }
+    .event-ticket-form input,.event-ticket-form select { width:100%; min-height:44px; padding:9px; border:1px solid rgba(43,82,25,.25); font:inherit; }
+    .ticket-sold-out { color:#963b31; font-weight:500; }
+    @media(max-width:760px){.event-detail{grid-template-columns:1fr;gap:22px}.event-image{max-height:340px}}
+  </style>
+</head>
+<body>
+  <nav class="navbar"><a href="events.html" class="navbar__logo"><span class="navbar__logo-text">Goal Diggers<span>Read · Reflect · Act</span></span></a><div class="navbar__links"><a href="events.html">All events</a><a href="donate.html" class="navbar__cta">Donate</a></div></nav>
+  <main class="container">
+    <p class="section-label" style="margin-top:32px"><a href="events.html">Events</a> / Tickets</p>
+    <p id="event-load-message" role="status">Loading event…</p>
+    <section class="event-detail" id="event-detail" hidden>
+      <div>
+        <img class="event-image" id="event-image" alt="" />
+        <p class="section-label" id="event-date"></p>
+        <h1 id="event-name"></h1>
+        <p id="event-venue"></p>
+        <p id="event-description"></p>
+        <p id="ticket-cutoff"></p>
+      </div>
+      <form class="event-ticket-form" id="ticket-form">
+        <p class="section-label">Open Book tickets</p>
+        <h2>Choose a ticket</h2>
+        <div id="ticket-tiers"></div>
+        <div class="form-field"><label for="ticket-tier">Ticket tier</label><select id="ticket-tier" required></select></div>
+        <div class="form-field"><label for="ticket-quantity">Quantity</label><input id="ticket-quantity" type="number" min="1" max="10" value="1" required /></div>
+        <div class="form-field"><label for="ticket-buyer-name">Full name</label><input id="ticket-buyer-name" autocomplete="name" required /></div>
+        <div class="form-field"><label for="ticket-buyer-email">Email address</label><input id="ticket-buyer-email" type="email" autocomplete="email" required /></div>
+        <div class="form-field"><label for="ticket-buyer-phone">Phone (optional)</label><input id="ticket-buyer-phone" type="tel" autocomplete="tel" /></div>
+        <p id="ticket-payment-message" class="payment-message" hidden></p>
+        <button id="ticket-checkout" class="checkout-btn" type="submit">Continue to checkout</button>
+      </form>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+  <script src="js/payments.js"></script>
+  <script src="js/event-detail.js"></script>
+</body>
+</html>

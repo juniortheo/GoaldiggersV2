@@ -6,7 +6,7 @@
   <title>Shop — Goal Diggers Book Club</title>
   <link rel="icon" type="image/png" href="logo gold.png" />
   <link rel="apple-touch-icon" href="logo gold.png" />
-  <meta name="description" content="Club merch coming soon — every purchase funds school fees." />
+  <meta name="description" content="Books and club goods supporting Goal Diggers community programmes." />
 <meta property="og:title" content="Shop — Goal Diggers Book Club" />
 <meta property="og:description" content="Shop books and meaningful goods supporting our Kigali literacy and education work. Read · Reflect · Act." />
 <meta property="og:image" content="https://goaldiggers.rw/logo gold.png" />
@@ -85,17 +85,27 @@
     <p class="section-label reveal visible">The Goal Diggers Shop</p>
     <h1 class="section-title reveal visible" style="font-size:clamp(2.4rem,5vw,3.8rem)">Wear your <em>love of books</em></h1>
     <div class="divider reveal visible"></div>
-    <p class="section-body reveal visible" style="margin:0 auto">Club merch is on its way — every purchase goes straight into the school-fees fund.</p>
+    <p class="section-body reveal visible" style="margin:0 auto">Books and club goods that help fund our community programmes.</p>
   </div>
 </section>
 
 <section style="padding-top:30px">
   <div class="container">
     <div id="products-list" class="grid-3">Loading…</div>
-    <div class="card text-center mt-40 reveal" style="background:var(--color-cream)">
-      <h3>Want first dibs?</h3>
-      <p>Tell us you're interested and we'll message you the moment the shop opens.</p>
-      <a href="contact.html" class="btn btn-green mt-16">Notify Me</a>
+    <form class="donate-form-wrap mt-40" id="shop-checkout">
+      <div class="donate-form-header"><p class="section-label">Your selection</p><h3>Cart &amp; checkout</h3></div>
+      <div class="donate-form-body">
+        <div id="cart-lines" aria-live="polite">Your cart is empty.</div>
+        <p id="cart-total" class="section-body">Total: 0 RWF</p>
+        <div class="form-row payment-field-row">
+          <div class="form-field"><label for="shop-buyer-name">Full name</label><input id="shop-buyer-name" autocomplete="name" required /></div>
+          <div class="form-field"><label for="shop-buyer-email">Email address</label><input id="shop-buyer-email" type="email" autocomplete="email" required /></div>
+        </div>
+        <div class="form-field"><label for="shop-buyer-phone">Phone (optional)</label><input id="shop-buyer-phone" type="tel" autocomplete="tel" /></div>
+        <p class="payment-message" id="shop-payment-message" hidden></p>
+        <button class="checkout-btn" id="shop-checkout-button" type="submit">Checkout securely</button>
+      </div>
+    </form>
     </div>
   </div>
 </section>
@@ -152,12 +162,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="script.js"></script>
+<script src="https://checkout.flutterwave.com/v3.js"></script>
+<script src="js/payments.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
 <script src="public-content.js"></script>
 <script>
   loadProducts('products-list');
 </script>
+<script src="js/shop-cart.js"></script>
 
 <a href="https://wa.me/250787430951?text=Hi%20Goal%20Diggers!%20I%20saw%20your%20website%20and%20wanted%20to%20reach%20out." target="_blank" rel="noopener" aria-label="Chat on WhatsApp" class="wa-float">
   <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M17.5 14.4c-.3-.2-1.8-.9-2.1-1s-.5-.2-.7.2c-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.4.5-.5s.2-.3.3-.5c.1-.2 0-.4 0-.5s-.7-1.7-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1 2.8 1.2 3c.2.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 2-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 4.9L2 22l5.3-1.4c1.4.8 3 1.2 4.7 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
