@@ -173,3 +173,53 @@ function handleContactForm(event) {
   window.location.href = `mailto:${CLUB_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body + '\n\n— ' + name)}`;
   showToast(`Thank you, ${name}! Your email app is opening\u2026`);
 }
+
+/* ---------- HOMEPAGE: past-reads shelf (hover / focus / tap a book to show its details) ---------- */
+(function () {
+  const shelf = document.getElementById('gd-shelf-books');
+  const detail = document.getElementById('gd-shelf-detail');
+  if (!shelf || !detail) return;
+  const books = Array.from(shelf.querySelectorAll('.gd-shelf__book'));
+  const fields = {
+    title: document.getElementById('gd-shelf-title'),
+    author: document.getElementById('gd-shelf-author'),
+    tag: document.getElementById('gd-shelf-tag'),
+    desc: document.getElementById('gd-shelf-desc'),
+  };
+  let current = shelf.querySelector('.gd-shelf__book.is-active') || books[0];
+  let swapTimer = null;
+
+  function fill(book) {
+    fields.title.textContent = book.dataset.title || '';
+    fields.author.textContent = book.dataset.author || '';
+    fields.tag.textContent = book.dataset.tag || '';
+    fields.desc.textContent = book.dataset.desc || '';
+  }
+
+  function mark(book) {
+    books.forEach((b) => {
+      b.classList.toggle('is-active', b === book);
+      b.setAttribute('aria-pressed', b === book ? 'true' : 'false');
+    });
+  }
+
+  function show(book) {
+    if (!book || book === current) return;
+    current = book;
+    mark(book);
+    detail.classList.add('is-swapping');
+    clearTimeout(swapTimer);
+    swapTimer = setTimeout(() => {
+      fill(book);
+      detail.classList.remove('is-swapping');
+    }, 180);
+  }
+
+  if (current) { mark(current); fill(current); }
+
+  books.forEach((book) => {
+    book.addEventListener('mouseenter', () => show(book));
+    book.addEventListener('focus', () => show(book));
+    book.addEventListener('click', () => show(book));
+  });
+})();

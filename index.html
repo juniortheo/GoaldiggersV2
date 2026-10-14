@@ -165,6 +165,153 @@
     </div>
   </div>
 </section>
+
+<!-- ============================================================
+     WHY WE READ: member spotlight
+     EDIT HERE: the member's name, tagline, words and role.
+     Photo: a cut-out PNG with a transparent background, saved
+     as team-reader.png in the project root.
+     ============================================================ -->
+<section class="gd-voice" aria-labelledby="gd-voice-name">
+  <div class="container gd-voice__grid">
+    <div class="gd-voice__text">
+      <p class="section-label reveal">Why we read</p>
+      <h2 class="gd-voice__name reveal reveal-delay-1" id="gd-voice-name">
+        <span>Bigagaza</span>
+        <span>Eva<em>:</em></span>
+      </h2>
+      <p class="gd-voice__tagline reveal reveal-delay-1">On reading as a way of showing up for people.</p>
+      <div class="divider reveal reveal-delay-2"></div>
+      <blockquote class="gd-voice__quote reveal reveal-delay-2">
+        <p>I read because every book opens a door I did not know existed. In our club, I do not just hear another person’s thoughts — I see a new way of living, of caring, and of dreaming. Reading reminds me that growth is not only personal; it is communal. When we read together, we become kinder, more awake, and more willing to build a better life for one another.</p>
+      </blockquote>
+      <p class="gd-voice__role reveal reveal-delay-2">Member · Goal Diggers Book Club</p>
+    </div>
+    <div class="gd-voice__figure reveal reveal-delay-1">
+      <span class="gd-voice__halo" aria-hidden="true"></span>
+      <img src="team-reader.png" alt="Portrait of a Goal Diggers member" class="gd-voice__photo"
+           onerror="this.closest('.gd-voice__figure').classList.add('is-empty')" />
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     BOOK OF THE MONTH: reads the book marked "current" in the
+     admin dashboard (Books tab). No code edits needed to change it.
+     ============================================================ -->
+<section class="gd-botm" aria-labelledby="gd-botm-title">
+  <div class="container">
+    <p class="section-label reveal">Book of the Month</p>
+    <div class="gd-botm__grid">
+      <div class="gd-botm__cover-wrap reveal" id="gd-botm-cover-wrap">
+        <div class="gd-book3d">
+          <img id="gd-botm-cover" alt="" hidden onerror="this.hidden=true" />
+          <span class="gd-book3d__placeholder" aria-hidden="true">Goal Diggers</span>
+        </div>
+      </div>
+      <div class="gd-botm__text">
+        <h2 class="gd-botm__title reveal" id="gd-botm-title">Loading this month's book…</h2>
+        <p class="gd-botm__meta reveal reveal-delay-1"><span id="gd-botm-author"></span><span id="gd-botm-month"></span></p>
+        <div class="divider reveal reveal-delay-1"></div>
+        <p class="section-body gd-botm__desc reveal reveal-delay-2" id="gd-botm-desc"></p>
+        <div class="gd-botm__actions reveal reveal-delay-2">
+          <a href="book.html" class="btn btn-green">Start reading</a>
+          <a href="events.html" class="btn btn-outline-green">Join us this Sunday</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PAST READS SHELF: hover, focus or tap a book to show its
+     details in the panel. To add a book, copy one <button> and
+     change its data-* attributes and image.
+     ============================================================ -->
+<section class="gd-shelf" aria-labelledby="gd-shelf-heading">
+  <div class="container">
+    <div class="gd-shelf__head">
+      <p class="section-label reveal">Past reads</p>
+      <h2 class="section-title reveal reveal-delay-1" id="gd-shelf-heading">Books we've <em>read together</em></h2>
+      <p class="gd-shelf__hint reveal reveal-delay-1">Hover or tap a book to read about it</p>
+    </div>
+
+    <div class="gd-shelf__layout">
+      <div class="gd-shelf__books" id="gd-shelf-books" role="group" aria-label="Past book club reads">
+
+        <button type="button" class="gd-shelf__book is-active" aria-pressed="true" aria-controls="gd-shelf-detail"
+          data-title="When Breath Becomes Air"
+          data-author="Paul Kalanithi"
+          data-tag="Memoir · 2016"
+          data-desc="At 36, a young neurosurgeon is diagnosed with stage IV lung cancer and crosses from doctor to patient. Written in his final months, it asks what makes a life worth living when time is running out.">
+          <span class="gd-shelf__cover">
+            <img src="js/books/When_Breath_Becomes_Air.jpg" alt="Cover of When Breath Becomes Air by Paul Kalanithi" loading="lazy"
+                 onerror="this.parentElement.classList.add('is-missing')" />
+            <span class="gd-shelf__fallback" aria-hidden="true">When Breath Becomes Air</span>
+          </span>
+        </button>
+
+        <button type="button" class="gd-shelf__book" aria-pressed="false" aria-controls="gd-shelf-detail"
+          data-title="Born a Crime"
+          data-author="Trevor Noah"
+          data-tag="Memoir · 2016"
+          data-desc="Trevor Noah's childhood in apartheid and post-apartheid South Africa, where his very birth, to a Black Xhosa mother and a white Swiss father, broke the law. Funny and sharp, and at its heart a tribute to his fearless mother.">
+          <span class="gd-shelf__cover">
+            <img src="js/books/born-a-crime.jpeg" alt="Cover of Born a Crime by Trevor Noah" loading="lazy"
+                 onerror="this.parentElement.classList.add('is-missing')" />
+            <span class="gd-shelf__fallback" aria-hidden="true">Born a Crime</span>
+          </span>
+        </button>
+
+        <button type="button" class="gd-shelf__book" aria-pressed="false" aria-controls="gd-shelf-detail"
+          data-title="Kibogo"
+          data-author="Scholastique Mukasonga"
+          data-tag="Novel · Rwanda"
+          data-desc="As Catholic missionaries settle in Rwanda, a community holds on to the legend of Kibogo, said to have risen into the sky to bring rain in a time of famine, while the new faith tries to write over the old. A Rwandan story by a Rwandan-born author.">
+          <span class="gd-shelf__cover">
+            <img src="js/books/kibogo.jpeg" alt="Cover of Kibogo by Scholastique Mukasonga" loading="lazy"
+                 onerror="this.parentElement.classList.add('is-missing')" />
+            <span class="gd-shelf__fallback" aria-hidden="true">Kibogo</span>
+          </span>
+        </button>
+
+        <button type="button" class="gd-shelf__book" aria-pressed="false" aria-controls="gd-shelf-detail"
+          data-title="A Long Walk to Water"
+          data-author="Linda Sue Park"
+          data-tag="Novel · Based on a true story"
+          data-desc="Two stories in Sudan, decades apart: Salva, a boy who flees war in 1985 and walks across the desert as one of the Lost Boys, and Nya, who in 2008 walks for hours every day to fetch water. Based on the true story of Salva Dut.">
+          <span class="gd-shelf__cover">
+            <img src="js/books/a-long-walk-to-water.jpg" alt="Cover of A Long Walk to Water by Linda Sue Park" loading="lazy"
+                 onerror="this.parentElement.classList.add('is-missing')" />
+            <span class="gd-shelf__fallback" aria-hidden="true">A Long Walk to Water</span>
+          </span>
+        </button>
+
+        <button type="button" class="gd-shelf__book" aria-pressed="false" aria-controls="gd-shelf-detail"
+          data-title="The Full Picture"
+          data-author="Jessica Carmichael"
+          data-tag="Novel · Debut"
+          data-desc="A compelling debut about identity, belonging, and the stories we tell about ourselves. As a young woman tries to balance ambition, family expectations, and self-discovery, she learns that being fully seen is often the beginning of becoming fully alive.">
+          <span class="gd-shelf__cover">
+            <img src="js/books/the-full-picture.jpg" alt="Cover of The Full Picture by Jessica Carmichael" loading="lazy"
+                 onerror="this.parentElement.classList.add('is-missing')" />
+            <span class="gd-shelf__fallback" aria-hidden="true">The Full Picture</span>
+          </span>
+        </button>
+
+      </div>
+
+      <aside class="gd-shelf__detail" id="gd-shelf-detail" aria-live="polite">
+        <span class="tag" id="gd-shelf-tag">Memoir · 2016</span>
+        <h3 class="gd-shelf__title" id="gd-shelf-title">When Breath Becomes Air</h3>
+        <p class="gd-shelf__author">by <span id="gd-shelf-author">Paul Kalanithi</span></p>
+        <p class="gd-shelf__desc" id="gd-shelf-desc">At 36, a young neurosurgeon is diagnosed with stage IV lung cancer and crosses from doctor to patient. Written in his final months, it asks what makes a life worth living when time is running out.</p>
+        <a href="book.html" class="gd-shelf__link">See every book we've read &rarr;</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
 <section id="blog">
   <div class="container">
     <div class="text-center">
@@ -365,6 +512,7 @@
 <script>
   loadBlogPosts('home-blog-posts');
   loadGalleryGrid('home-highlights', { featuredOnly: true, limit: 6 });
+  loadHomeBookOfMonth();
 </script>
 
 <a href="https://wa.me/250787430951?text=Hi%20Goal%20Diggers!%20I%20saw%20your%20website%20and%20wanted%20to%20reach%20out." target="_blank" rel="noopener" aria-label="Chat on WhatsApp" class="wa-float">

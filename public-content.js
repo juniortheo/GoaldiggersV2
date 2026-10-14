@@ -160,6 +160,48 @@ async function loadProducts(containerId) {
   });
 }
 
+/* ---------- HOMEPAGE: Book of the Month feature (reads the "current" book set in the admin) ---------- */
+async function loadHomeBookOfMonth() {
+  const titleEl = document.getElementById('gd-botm-title');
+  if (!titleEl) return;
+  const coverEl = document.getElementById('gd-botm-cover');
+  const coverWrap = document.getElementById('gd-botm-cover-wrap');
+  const authorEl = document.getElementById('gd-botm-author');
+  const monthEl = document.getElementById('gd-botm-month');
+  const descEl = document.getElementById('gd-botm-desc');
+
+  let book = null;
+  try {
+    const { data } = await db
+      .from('books')
+      .select('title, author, description, cover_url, reading_month')
+      .eq('is_current', true)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    book = data;
+  } catch (e) {
+    book = null;
+  }
+
+  if (!book) {
+    titleEl.textContent = 'Our next book is on its way';
+    if (descEl) descEl.textContent = 'We announce each month’s book at our Sunday gathering. Check back soon, or join us at Fablab Rwanda to hear it first.';
+    if (coverWrap) coverWrap.classList.add('is-empty');
+    return;
+  }
+
+  titleEl.textContent = book.title;
+  if (authorEl) authorEl.textContent = book.author;
+  if (monthEl && book.reading_month) monthEl.textContent = ' · ' + book.reading_month;
+  if (descEl) descEl.textContent = book.description || '';
+  if (coverEl && book.cover_url) {
+    coverEl.src = book.cover_url;
+    coverEl.alt = 'Cover of ' + book.title + ' by ' + book.author;
+    coverEl.hidden = false;
+  }
+}
+
 /* ---------- GALLERY ---------- */
 const defaultGalleryItems = [
   { image_url: 'school.jpeg', caption: 'Scholarship Program', link: 'scholarship.html', span: 2 },
