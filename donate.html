@@ -190,25 +190,26 @@
           </div>
         </div>
 
-        <fieldset class="payment-fieldset">
-          <legend>Choose an amount</legend>
-          <div class="quick-amounts" id="quick-amounts">
-            <button class="quick-pill" type="button" data-rwf="10000">10,000 RWF</button>
-            <button class="quick-pill quick-pill-note" type="button" data-rwf="25000" data-description="keeps one child in school for a month"><strong>25,000 RWF</strong><span>keeps one child in school for a month</span></button>
-            <button class="quick-pill quick-pill-note" type="button" data-rwf="25000" data-description="insures one watchman family for a year"><strong>25,000 RWF</strong><span>insures one watchman family for a year</span></button>
-            <button class="quick-pill" type="button" data-rwf="50000">50,000 RWF</button>
-            <button class="quick-pill" type="button" data-rwf="100000">100,000 RWF</button>
-          </div>
-        </fieldset>
         <div class="amount-row">
           <div class="form-field currency-field">
             <label for="currency-select">Currency</label>
             <select class="currency-select" id="currency-select"><option value="RWF">RWF · Rwanda</option><option value="USD">USD · International</option></select>
           </div>
           <div class="form-field amount-field">
-            <label for="amount-input">Custom amount</label>
+            <label for="amount-input">Amount to donate</label>
             <input type="number" class="amount-input" id="amount-input" placeholder="Enter amount" min="1" step="1" inputmode="decimal" required />
           </div>
+        </div>
+        <div class="donation-impact" id="donation-impact" hidden>
+          <div class="impact-result" id="impact-result" hidden>
+            <strong class="impact-count" id="impact-count" aria-hidden="true">0</strong>
+            <span class="impact-unit" id="impact-unit"></span>
+          </div>
+          <p class="impact-message" id="impact-message" aria-live="polite"></p>
+          <div class="impact-progress" role="progressbar" aria-label="Progress toward the next support estimate" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <span id="impact-progress-fill"></span>
+          </div>
+          <p class="impact-caption">Illustrative estimates use 25,000 RWF or $25 per support unit. Actual allocation depends on current program needs.</p>
         </div>
         <div class="form-row payment-field-row">
           <div class="form-field"><label for="donor-name">Full name</label><input id="donor-name" name="name" autocomplete="name" maxlength="120" required /></div>
@@ -227,14 +228,17 @@
           <span id="checkout-label">Donate securely</span>
         </button>
 
-        <div class="manual-payment">
-          <p class="section-label">Prefer a manual payment?</p>
-          <h4>MTN MoMo Pay</h4>
-          <p>Dial this code on your phone. MoMo Pay is available in RWF.</p>
-          <code id="momo-code">*182*8*1*92452*&lt;amount&gt;#</code>
-          <button class="btn btn-outline-green" type="button" id="copy-momo">Copy code</button>
-          <h4>Bank transfer</h4>
-          <p>Account name: <strong>[Club account name]</strong><br>Bank: <strong>[Bank name]</strong><br>Account number: <strong>[Account number]</strong><br>SWIFT: <strong>[SWIFT code]</strong></p>
+        <button class="manual-payment-toggle" id="manual-payment-toggle" type="button" aria-expanded="false" aria-controls="manual-payment" aria-label="Prefer to pay manually? (MoMo or bank transfer)">Prefer to pay manually? (MoMo or bank transfer)</button>
+        <div class="manual-payment-panel" id="manual-payment" hidden aria-hidden="true" inert>
+          <div class="manual-payment">
+            <p class="section-label">Prefer a manual payment?</p>
+            <h4>MTN MoMo Pay</h4>
+            <p>Dial this code on your phone. MoMo Pay is available in RWF.</p>
+            <code id="momo-code">*182*8*1*92452*&lt;amount&gt;#</code>
+            <button class="btn btn-outline-green" type="button" id="copy-momo">Copy code</button>
+            <h4>Bank transfer</h4>
+            <p>Account name: <strong>GOAL DIGGERS</strong><br>Bank: <strong>Bank of Kigali</strong><br>Account number: <strong>100283758898</strong><br><span id="bank-swift-line" hidden>SWIFT: <strong id="bank-swift">BKIGRWRW</strong><br></span></p>
+          </div>
         </div>
 
         <div class="secure-note">

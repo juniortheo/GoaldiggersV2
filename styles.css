@@ -550,16 +550,7 @@ section.donate-section { padding: clamp(16px, 3vw, 32px) 0; }
 }
 .freq-btn.active { background: var(--color-deep-green); color: var(--color-cream); }
 
-.quick-amounts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
-.quick-pill-note { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 3px; min-height: 78px; padding: 10px; }
-.quick-pill-note span { font-size: .7rem; line-height: 1.3; }
-.quick-pill {
-  border: 1px solid rgba(43,82,25,.25); background: #fff; border-radius: var(--radius);
-  padding: 10px 4px; font-family: var(--font-sans); font-size: .85rem; cursor: pointer;
-  transition: all .2s; color: var(--color-charcoal);
-}
-.quick-pill:hover { border-color: var(--color-gold); }
-.quick-pill.selected { background: var(--color-deep-green); color: var(--color-cream); border-color: var(--color-deep-green); }
+.manual-payment-toggle:focus-visible { outline: 3px solid var(--color-gold); outline-offset: 3px; }
 
 .amount-row { display: grid; grid-template-columns: minmax(140px, .8fr) 1.2fr; gap: 14px; align-items: start; }
 .currency-select {
@@ -574,6 +565,16 @@ section.donate-section { padding: clamp(16px, 3vw, 32px) 0; }
 }
 .amount-input:focus, .currency-select:focus { outline: none; border-color: var(--color-deep-green); }
 .amount-input::placeholder { color: #bbb; font-size: .95rem; font-weight: 400; }
+.donation-impact { margin: 0 0 18px; padding: 16px; border-left: 3px solid var(--color-gold); background: var(--color-cream); }
+.impact-result { display: flex; align-items: baseline; gap: 8px; color: var(--color-deep-green); }
+.impact-count { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 600; line-height: 1; }
+.impact-count.impact-count-pop { animation: impact-count-pop .32s ease-out; }
+.impact-unit { font-size: .95rem; font-weight: 500; }
+.impact-message { margin: 8px 0; color: var(--color-charcoal); font-size: .88rem; }
+.impact-progress { height: 6px; overflow: hidden; border-radius: 4px; background: rgba(43,82,25,.14); }
+.impact-progress span { display: block; width: 0; height: 100%; border-radius: inherit; background: var(--color-deep-green); transition: width .4s ease; }
+.impact-caption { margin: 8px 0 0; color: var(--color-muted); font-size: .72rem; line-height: 1.4; }
+@keyframes impact-count-pop { 50% { transform: scale(1.16); color: var(--color-gold); } }
 
 .donate-note { font-size: .82rem; color: var(--color-muted); margin: 10px 0 16px; }
 .checkout-btn {
@@ -603,6 +604,11 @@ section.donate-section { padding: clamp(16px, 3vw, 32px) 0; }
 .anonymous-option { display: flex; align-items: center; gap: 10px; margin: 6px 0 14px; color: var(--color-charcoal); font-size: .9rem; }
 .anonymous-option input { width: 18px; height: 18px; accent-color: var(--color-deep-green); }
 .manual-payment { margin-top: 24px; padding: 18px; border-top: 1px solid rgba(43,82,25,.15); background: var(--color-cream); }
+.manual-payment-panel { grid-template-rows: 1fr; opacity: 1; transition: grid-template-rows .24s ease, opacity .24s ease; }
+.manual-payment-panel:not([hidden]) { display: grid; }
+.manual-payment-panel.is-collapsing { grid-template-rows: 0fr; opacity: 0; }
+.manual-payment-panel > .manual-payment { min-height: 0; overflow: hidden; }
+.manual-payment-toggle { display: block; margin: 12px auto 0; padding: 4px 0; border: 0; background: transparent; color: var(--color-deep-green); font: inherit; font-size: .85rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .manual-payment .section-label { margin-bottom: 4px; }
 .manual-payment h4 { margin: 14px 0 4px; font-family: var(--font-serif); font-size: 1.25rem; color: var(--color-deep-green); }
 .manual-payment p { margin: 4px 0 10px; color: var(--color-muted); font-size: .88rem; }
@@ -617,8 +623,8 @@ section.donate-section { padding: clamp(16px, 3vw, 32px) 0; }
   .amount-row { grid-template-columns: 1fr; gap: 0; }
   .currency-select, .amount-input { width: 100%; min-height: 48px; }
   .donate-form-body .form-row { grid-template-columns: 1fr; gap: 0; }
-  .quick-amounts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+@media (prefers-reduced-motion: reduce) { .manual-payment-panel, .impact-progress span { transition: none; } .impact-count.impact-count-pop { animation: none; } }
 
 /* ============================================================
    EVENTS

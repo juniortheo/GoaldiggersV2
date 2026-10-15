@@ -3,14 +3,19 @@
   if (!form) return;
   const amount = document.getElementById('amount-input');
   const currency = document.getElementById('currency-select');
+  const designation = document.getElementById('donation-designation');
+  const impact = document.getElementById('donation-impact');
+  const impactResult = document.getElementById('impact-result');
+  const impactCount = document.getElementById('impact-count');
+  const impactUnit = document.getElementById('impact-unit');
+  const impactMessage = document.getElementById('impact-message');
+  const impactProgress = document.querySelector('.impact-progress');
+  const impactProgressFill = document.getElementById('impact-progress-fill');
+  const manualPaymentToggle = document.getElementById('manual-payment-toggle');
+  const manualPaymentPanel = document.getElementById('manual-payment');
   const frequencyButtons = [...document.querySelectorAll('[data-frequency]')];
   let frequency = 'once';
-
-  function setAmount(value, selectedButton) {
-    amount.value = value;
-    document.querySelectorAll('.quick-pill').forEach((button) => button.classList.toggle('selected', button === selectedButton));
-    updateManualCode();
-  }
+  let manualPaymentCollapseTimeout;
 
   function updateManualCode() {
     const code = document.getElementById('momo-code');
@@ -20,9 +25,80 @@
       : '*182*8*1*92452*<amount>#';
   }
 
-  document.querySelectorAll('.quick-pill').forEach((button) => {
-    button.addEventListener('click', () => setAmount(currency.value === 'USD' ? (button.dataset.description ? '25' : ({ 10000: '10', 50000: '50', 100000: '100' }[button.dataset.rwf])) : button.dataset.rwf, button));
+  function updateImpact() {
+    const amountValue = Number(amount.value);
+    if (!Number.isFinite(amountValue) || amountValue <= 0) {
+      impact.hidden = true;
+      return;
+    }
+
+    impact.hidden = false;
+    const supportUnit = currency.value === 'RWF' ? 25000 : 25;
+    const units = Math.floor(amountValue / supportUnit);
+    const remainder = amountValue % supportUnit;
+    const progress = units > 0 && remainder === 0 ? 100 : Math.round((remainder / supportUnit) * 100);
+    const numberFormat = new Intl.NumberFormat(currency.value === 'RWF' ? 'en-RW' : 'en-US');
+    impactProgress.setAttribute('aria-valuenow', String(progress));
+    impactProgressFill.style.width = `${progress}%`;
+    impactResult.hidden = units === 0;
+
+    if (units > 0) {
+      if (impactCount.textContent !== String(units)) {
+        impactCount.textContent = String(units);
+        impactCount.classList.remove('impact-count-pop');
+        void impactCount.offsetWidth;
+        impactCount.classList.add('impact-count-pop');
+      }
+      if (designation.value === 'Scholarship Program') {
+        impactUnit.textContent = `${units === 1 ? 'child' : 'children'} supported for one month`;
+      } else if (designation.value === 'Insurance Program (Mutuelle)') {
+        impactUnit.textContent = `${units === 1 ? 'watchman family' : 'watchman families'} insured for one year`;
+      } else {
+        impactUnit.textContent = `${units === 1 ? 'support unit' : 'support units'}`;
+      }
+    }
+
+    const nextUnitAmount = numberFormat.format(supportUnit - remainder);
+    if (designation.value === 'Scholarship Program') {
+      impactMessage.textContent = units === 0
+        ? `Your gift is ${progress}% of the way toward one child's school fees for a month.`
+        : remainder > 0
+          ? `An additional ${currency.value} ${nextUnitAmount} could support one more child for a month.`
+          : 'Each support unit could cover one child\'s school fees for a month.';
+    } else if (designation.value === 'Insurance Program (Mutuelle)') {
+      impactMessage.textContent = units === 0
+        ? `Your gift is ${progress}% of the way toward one watchman family's insurance for a year.`
+        : remainder > 0
+          ? `An additional ${currency.value} ${nextUnitAmount} could insure one more watchman family for a year.`
+          : 'Each support unit could cover one watchman family\'s insurance for a year.';
+    } else {
+      impactMessage.textContent = units === 0
+        ? `Your gift is ${progress}% of the way toward a support unit.`
+        : 'Each unit is equivalent to one child-month of school support or one watchman family insured for a year; allocation follows current needs.';
+    }
+  }
+
+  manualPaymentToggle.addEventListener('click', () => {
+    const expanded = manualPaymentToggle.getAttribute('aria-expanded') === 'true';
+    window.clearTimeout(manualPaymentCollapseTimeout);
+    manualPaymentToggle.setAttribute('aria-expanded', String(!expanded));
+    manualPaymentPanel.setAttribute('aria-hidden', String(expanded));
+    manualPaymentPanel.inert = expanded;
+    if (expanded) {
+      manualPaymentPanel.classList.add('is-collapsing');
+      manualPaymentCollapseTimeout = window.setTimeout(() => {
+        if (manualPaymentToggle.getAttribute('aria-expanded') === 'false') {
+          manualPaymentPanel.hidden = true;
+          manualPaymentPanel.classList.remove('is-collapsing');
+        }
+      }, 260);
+      return;
+    }
+    manualPaymentPanel.hidden = false;
+    manualPaymentPanel.classList.add('is-collapsing');
+    requestAnimationFrame(() => manualPaymentPanel.classList.remove('is-collapsing'));
   });
+
   frequencyButtons.forEach((button) => button.addEventListener('click', () => {
     frequency = button.dataset.frequency;
     frequencyButtons.forEach((choice) => {
@@ -35,20 +111,16 @@
       : 'One-time gifts are securely processed by Flutterwave.';
   }));
   currency.addEventListener('change', () => {
-      amount.step = currency.value === 'USD' ? '0.01' : '1';
-      amount.max = currency.value === 'USD' ? '10000' : '100000000';
-    document.querySelectorAll('.quick-pill').forEach((button) => {
-      button.textContent = currency.value === 'USD' ? `$${button.dataset.description ? '25' : ({ 10000: '10', 50000: '50', 100000: '100' }[button.dataset.rwf])}` : `${Number(button.dataset.rwf).toLocaleString()} RWF`;
-      if (button.dataset.description) button.innerHTML = `<strong>${currency.value === 'USD' ? '$25 USD' : '25,000 RWF'}</strong><span>${button.dataset.description}</span>`;
-    });
-    amount.value = '';
-    document.querySelectorAll('.quick-pill').forEach((button) => button.classList.remove('selected'));
+    amount.step = currency.value === 'USD' ? '0.01' : '1';
+    amount.max = currency.value === 'USD' ? '10000' : '100000000';
     updateManualCode();
+    updateImpact();
   });
   amount.addEventListener('input', () => {
-    document.querySelectorAll('.quick-pill').forEach((button) => button.classList.remove('selected'));
     updateManualCode();
+    updateImpact();
   });
+  designation.addEventListener('change', updateImpact);
   document.getElementById('copy-momo').addEventListener('click', async () => {
     try { await navigator.clipboard.writeText(document.getElementById('momo-code').textContent); window.showToast('MoMo code copied.'); }
     catch { window.GoalPayments.showError('Could not copy the code. Select it and copy manually.'); }
@@ -79,13 +151,16 @@
     if (stats.error) throw new Error(stats.error);
     const usd = Number(stats.total_usd) ? ` · ${Number(stats.total_usd).toLocaleString()} USD` : '';
     document.getElementById('donation-stats').textContent = `${Number(stats.total_rwf).toLocaleString()} RWF${usd} raised · ${Number(stats.donor_count).toLocaleString()} donors`;
-  }).catch(() => { document.getElementById('donation-stats').textContent = 'Thank you for helping our community grow.'; });
+  }).catch(() => { document.getElementById('donation-stats').textContent = 'Community giving totals are temporarily unavailable.'; });
   const retry = new URLSearchParams(window.location.search);
   if (retry.has('amount')) {
     currency.value = retry.get('currency') === 'USD' ? 'USD' : 'RWF';
     currency.dispatchEvent(new Event('change'));
     amount.value = retry.get('amount');
     updateManualCode();
+    updateImpact();
   }
+  const swiftCode = document.getElementById('bank-swift').textContent.trim();
+  document.getElementById('bank-swift-line').hidden = !swiftCode;
   updateManualCode();
 })();

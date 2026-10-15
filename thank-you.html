@@ -38,7 +38,7 @@
       document.getElementById('payment-heading').textContent = 'Thank you for showing up.';
       const money = `${Number(payment.amount).toLocaleString()} ${payment.currency}`;
       if (payment.payment_type === 'donation') {
-        document.getElementById('payment-summary').textContent = `Your ${money} gift to ${payment.designation} is confirmed. Thank you for helping our community thrive.`;
+        document.getElementById('payment-summary').textContent = `Your ${money} gift to ${payment.designation} is confirmed. Thank you for helping our community grow.`;
         document.getElementById('monthly-cancel').hidden = payment.frequency !== 'monthly';
       }
       if (payment.payment_type === 'ticket') {
